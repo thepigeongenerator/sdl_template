@@ -58,6 +58,7 @@ fi
 EXE_PATH=$BUILD_DIR/$ARCHITECTURE/$PROJECT_NAME$FILE_EXSTENSION
 echo "building at: $EXE_PATH"
 
+# check whether the compiler path contains an executable at said path
 if [ ! -x $COMPILER ]; then
     echo -e "\033[91mCouldn't find an executable at path: \033[0m $COMPILER"
     exit -1

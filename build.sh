@@ -58,6 +58,11 @@ fi
 EXE_PATH=$BUILD_DIR/$ARCHITECTURE/$PROJECT_NAME$FILE_EXSTENSION
 echo "building at: $EXE_PATH"
 
+if [ ! -x $COMPILER ]; then
+    echo -e "\033[91mCouldn't find an executable at path: \033[0m $COMPILER"
+    exit -1
+fi
+
 # compile the code
 COMMAND="$COMPILER `find ./src -name *.c` -o $EXE_PATH -Wall -g -lm $ARGS"
 echo "using command: $COMMAND"

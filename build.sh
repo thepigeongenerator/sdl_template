@@ -26,7 +26,7 @@ args_win86-64()
 args_emscripten()
 {
     ARCHITECTURE="web"
-    COMPILER="/home/user/.local/bin/emcc"
+    COMPILER="emcc"         # just make sure it's in $PATH (it's a pain to install)
     ARGS="-s USE_SDL=2"
     FILE_EXSTENSION=".html"
 }
@@ -35,37 +35,37 @@ args_emscripten()
 if [ "$1" = "linux86_64" ]; then args_linux86_64
 elif [ "$1" = "win86_64" ]; then args_win86-64
 elif [ "$1" = "web" ]; then args_emscripten
-else echo -e "\033[91mdidn't include any arguments! D:\033[0m" && exit -1
+else echo -e "\033[91mdidn't include any arguments! D:\033[0m" && exit 1
 fi
 
 # check whether $BUILD_DIR or $ARCHITECTURE isn't set
 if [[ -z $BUILD_DIR ]] || [[ -z "$ARCHITECTURE" ]]; then
     echo -e "\033[91mBUILD_DIR or ARCHITECTURE not set D:\033[0m"
-    exit -1
+    exit 1
 fi
 
 
 # make (and clear) the build directory
-mkdir $BUILD_DIR $BUILD_DIR/$ARCHITECTURE
-rm -rf $BUILD_DIR/$ARCHITECTURE/*
+mkdir -p "$BUILD_DIR/$ARCHITECTURE"
+rm -rf "${BUILD_DIR:?}/$ARCHITECTURE/*"
 
 # copy included files or directories to the build directory
-if [[ ! -z $INCLUDE_IN_BUILD ]]; then
-    cp -r $INCLUDE_IN_BUILD $BUILD_DIR/$ARCHITECTURE
+if [[ -n $INCLUDE_IN_BUILD ]]; then
+    cp -r "$INCLUDE_IN_BUILD" "$BUILD_DIR/$ARCHITECTURE"
 fi
 
 # get the executable path
 EXE_PATH=$BUILD_DIR/$ARCHITECTURE/$PROJECT_NAME$FILE_EXSTENSION
 echo "building at: $EXE_PATH"
 
-# check whether the compiler path contains an executable at said path
-if [ ! -x $COMPILER ]; then
+# check whether the compiler can actually be executed
+if [ ! -x "$COMPILER" ] && ! command -v "$COMPILER" > /dev/null; then
     echo -e "\033[91mCouldn't find an executable at path: \033[0m $COMPILER"
-    exit -1
+    exit 1
 fi
 
 # compile the code
-COMMAND="$COMPILER `find ./src -name *.c` -o $EXE_PATH -Wall -g -lm $ARGS"
+COMMAND="$COMPILER $(find ./src -name "*.c") -o $EXE_PATH -Wall -g -lm $ARGS"
 echo "using command: $COMMAND"
 $COMMAND
 exit $?

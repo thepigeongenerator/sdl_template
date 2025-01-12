@@ -15,7 +15,7 @@ clean:
 # sets the variables for the different targets
 linux-x86_64:
 	$(MAKE) build ARCH=linux-x86_64 CC=gcc PCFLAGS="-lSDL2"
-win86-64:
+win-x86_64:
 	$(MAKE) build ARCH=win-x86-64 CC=x86_64-w64-mingw32-gcc PCFLAGS="-lmingw32 -lSDL2main -lSDL2 -mwindows" EXT=".exe"
 web:
 	$(MAKE) build ARCH=web CC=emcc PCFLAGS="-s USE_SDL=2" EXT=".html"

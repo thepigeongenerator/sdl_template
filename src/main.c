@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -67,7 +68,7 @@ void stop(void) {
 }
 
 // entry point of the application
-int main(void) {
+int32_t main(int32_t argc, char** argv) {
     init();
 
     while (playing)

@@ -2,8 +2,8 @@ NAME = sdl_template
 
 # compiler settings
 CC := clang
-CFLAGS = $(shell sdl2-config --cflags) -Wall -g
-LDFLAGS = $(shell sdl2-config --libs) -lm
+CFLAGS = $(shell pkg-config --cflags sdl2) -Wall -g
+LDFLAGS = $(shell pkg-config --libs sdl2) -lm
 
 # file locations
 DIR_BIN := bin

@@ -1,4 +1,5 @@
 {
+    "version": "2.0.0",
     "tasks": [
         {
             "type": "shell",
@@ -47,7 +48,14 @@
                 "isDefault": false
             },
             "detail": "builds the program for web using emscripten"
+        },
+        {
+            "label": "create compile_commands.json",
+            "type": "shell",
+            "command": "bear -- make",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

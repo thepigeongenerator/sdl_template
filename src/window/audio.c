@@ -13,7 +13,7 @@ typedef struct {
 } AudioCallbackData;
 
 // audio callback from SDL_AudioSpec; called when the audio device needs more data
-static void audio_mixer(void* userdata, Uint8* stream, int len) {
+static void audio_mixer(void* userdata, uint8_t* stream, int32_t len) {
     memset(stream, 0, len);         // clear the playing audio
     AudioDevice* device = userdata; // get the callback data
     AudioData* audio = device->playing_audio;
@@ -25,7 +25,7 @@ static void audio_mixer(void* userdata, Uint8* stream, int len) {
         }
 
         // get the length of which we shall be mixing
-        Uint32 mix_length = SDL_min(audio[i].length, len);
+        uint32_t mix_length = SDL_min(audio[i].length, len);
 
         // mix the audio with the stream
         SDL_MixAudioFormat(stream, audio[i].buffer, device->format, mix_length, SDL_MIX_MAXVOLUME);
@@ -37,7 +37,7 @@ static void audio_mixer(void* userdata, Uint8* stream, int len) {
 // converts the audio to the format of the audio device
 static void convert_audio(const AudioDevice* audio_device, const SDL_AudioSpec wav_spec, Uint8** wav_buffer, Uint32* wav_length) {
     // build the audio converter with the audio given
-    SDL_AudioCVT cvt = {0};
+    SDL_AudioCVT cvt;
     SDL_BuildAudioCVT(&cvt, wav_spec.format, wav_spec.channels, wav_spec.freq, audio_device->format, audio_device->channels, audio_device->freq);
 
     cvt.len = (*wav_length) * wav_spec.channels;          // the buffer length
@@ -56,8 +56,8 @@ static void convert_audio(const AudioDevice* audio_device, const SDL_AudioSpec w
 
 // loads a WAV file and returns the relevant information
 AudioData audio_load_wav(const AudioDevice* audio_device, const char* file_path) {
-    SDL_AudioSpec wav_spec = {0};
-    AudioData audio = {0};
+    SDL_AudioSpec wav_spec;
+    AudioData audio;
 
     SDL_LoadWAV(file_path, &wav_spec, &audio.buffer, &audio.length);
     convert_audio(audio_device, wav_spec, &audio.buffer, &audio.length);
@@ -67,7 +67,7 @@ AudioData audio_load_wav(const AudioDevice* audio_device, const char* file_path)
 }
 
 // initializes the audio device
-AudioDevice* audio_device_init(const int freq, const SDL_AudioFormat format, const Uint8 channels, const Uint16 samples) {
+AudioDevice* audio_device_init(const int32_t freq, const SDL_AudioFormat format, const uint8_t channels, const uint8_t samples) {
     // allocate memory for the audio device
     AudioDevice* audio_device = malloc(sizeof(AudioDevice));
 
@@ -103,7 +103,6 @@ void audio_play(const AudioDevice* audio_device, const AudioData audio) {
     for (int i = 0; i < MAX_SOUNDS; i++) {
         // overrite audio that has been deallocated
         if (playing_audio[i].length <= 0) {
-
             // override the audio
             playing_audio[i] = audio;
             break; // don't continue. :3

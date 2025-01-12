@@ -9,7 +9,7 @@
 void error(const ErrorCode error_code, const char* format, ...) {
     char buffer[MAX_STR_LEN] = {0}; // contains the buffer of the final string
 
-    va_list args = {0};
+    va_list args;
     va_start(args, format);
     vsnprintf(buffer, MAX_STR_LEN, format, args);
     va_end(args);
@@ -23,7 +23,7 @@ void error(const ErrorCode error_code, const char* format, ...) {
 void warn(const char* format, ...) {
     char buffer[MAX_STR_LEN] = {0}; // contains the buffer of the final string
 
-    va_list args = {0};
+    va_list args;
     va_start(args, format);
     vsnprintf(buffer, MAX_STR_LEN, format, args);
     va_end(args);

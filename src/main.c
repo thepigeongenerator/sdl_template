@@ -35,8 +35,8 @@ static void init(void) {
     }
 
     // initialize audio
-    AudioDevice* audio_device = audio_device_init(32000, AUDIO_S16, 1, 4096);
-    //AudioData audio1 = audio_load_wav(audio_device, "FILE MANE");
+    AudioDevice* audio_device = audio_device_init(32000, AUDIO_S16, 1, 255);
+    AudioData audio1 = audio_load_wav(audio_device, "FILE NAME");
 }
 
 // handles game application updating
@@ -53,10 +53,12 @@ static void update(void) {
         }
     }
 
-    // preform updates
+    // updates the game
     game_update((GameData){}, SDL_GetKeyboardState(NULL));
-    renderer_update(&(RenderData){
-        window, renderer});
+
+    // updates the render
+    RenderData render_data = {window, renderer};
+    renderer_update(&render_data);
 }
 
 // handles game application quitting
@@ -65,7 +67,7 @@ void stop(void) {
 }
 
 // entry point of the application
-int main(int argc, char** argv) {
+int main(void) {
     init();
 
     while (playing)

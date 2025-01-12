@@ -3,3 +3,4 @@
 !.vscode/launch.json
 bin
 obj
+compile_commands.json

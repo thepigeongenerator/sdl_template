@@ -12,6 +12,8 @@ SRC = $(wildcard src/*.c) $(wildcard src/**/*.c) $(wildcard src/**/**/*.c) $(wil
 OBJ = $(patsubst src/%,$(DIR_OBJ)/$(ARCH)/%,$(SRC:.c=.o))
 TARGET = $(DIR_BIN)/$(ARCH)/$(NAME)$(EXT)
 
+all: linux-x86_64 win-x86_64 web
+
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ)
 

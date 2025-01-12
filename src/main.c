@@ -36,7 +36,7 @@ static void init(void) {
 
     // initialize audio
     AudioDevice* audio_device = audio_device_init(32000, AUDIO_S16, 1, 255);
-    AudioData audio1 = audio_load_wav(audio_device, "FILE NAME");
+    //AudioData audio1 = audio_load_wav(audio_device, "FILE NAME");
 }
 
 // handles game application updating

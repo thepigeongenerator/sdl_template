@@ -12,11 +12,6 @@ SRC = $(wildcard src/*.c) $(wildcard src/**/*.c) $(wildcard src/**/**/*.c) $(wil
 OBJ = $(patsubst src/%,$(DIR_OBJ)/$(ARCH)/%,$(SRC:.c=.o))
 TARGET = $(DIR_BIN)/$(ARCH)/$(NAME)$(EXT)
 
-all: linux-x86_64 win-x86_64 web
-
-clean:
-	rm -rf $(DIR_BIN) $(DIR_OBJ)
-
 # sets the variables for the different targets
 linux-x86_64:
 	$(MAKE) build ARCH=linux-x86_64 CFLAGS="$(CFLAGS) -target x86_64-pc-linux-gnu"
@@ -24,6 +19,11 @@ win-x86_64:
 	$(MAKE) build ARCH=win-x86-64 CFLAGS="$(CFLAGS) -target x86_64-pc-windows-gnu" EXT=".exe"
 web:
 	$(MAKE) build ARCH=web CC=emcc EXT=".html"
+
+all: linux-x86_64 win-x86_64 web
+
+clean:
+	rm -rf $(DIR_BIN) $(DIR_OBJ)
 
 build: dirs binary
 

@@ -1,6 +1,6 @@
 #include "errors.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <stdarg.h>
 #include <stdio.h>
 

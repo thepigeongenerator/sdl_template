@@ -2,10 +2,10 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "build linux86_64",
-            "command": "./build.sh",
+            "label": "build linux-x86_64",
+            "command": "make",
             "args": [
-                "linux86_64"
+                "linux-x86_64"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -21,10 +21,10 @@
         },
         {
             "type": "shell",
-            "label": "build win86_64",
-            "command": "./build.sh",
+            "label": "build win-x86_64",
+            "command": "make",
             "args": [
-                "win86_64"
+                "win-x86_64"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -41,7 +41,7 @@
         {
             "type": "shell",
             "label": "build web",
-            "command": "./build.sh",
+            "command": "make",
             "args": [
                 "web"
             ],

@@ -1,7 +1,9 @@
 // initializes the window and renderer
 #include "renderer.h"
 
-#include <SDL.h>
+#include <SDL_error.h>
+#include <SDL_render.h>
+#include <SDL_video.h>
 #include <stdio.h>
 
 #include "../errors.h"

@@ -1,6 +1,11 @@
 #include "audio.h"
 
-#include <SDL.h>
+#include <SDL_audio.h>
+#include <SDL_error.h>
+#include <SDL_stdinc.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "../errors.h"
 
@@ -18,7 +23,7 @@ static void audio_mixer(void* userdata, uint8_t* stream, int32_t len) {
     AudioDevice* device = userdata; // get the callback data
     AudioData* audio = device->playing_audio;
 
-    for (int i = 0; i < MAX_SOUNDS; i++) {
+    for (int32_t i = 0; i < MAX_SOUNDS; i++) {
         // skip if the audio doesn't conain any further data
         if (audio[i].length <= 0) {
             continue;
@@ -35,14 +40,15 @@ static void audio_mixer(void* userdata, uint8_t* stream, int32_t len) {
 }
 
 // converts the audio to the format of the audio device
-static void convert_audio(const AudioDevice* audio_device, const SDL_AudioSpec wav_spec, Uint8** wav_buffer, Uint32* wav_length) {
+static void convert_audio(const AudioDevice* audio_device, const SDL_AudioSpec wav_spec, uint8_t** wav_buffer, uint32_t* wav_length) {
     // build the audio converter with the audio given
-    SDL_AudioCVT cvt;
+    SDL_AudioCVT cvt = {0};
     SDL_BuildAudioCVT(&cvt, wav_spec.format, wav_spec.channels, wav_spec.freq, audio_device->format, audio_device->channels, audio_device->freq);
 
-    cvt.len = (*wav_length) * wav_spec.channels;          // the buffer length
-    cvt.buf = (Uint8*)SDL_malloc(cvt.len * cvt.len_mult); // allocate size for the new buffer
-    memcpy(cvt.buf, *wav_buffer, *wav_length);            // copy wav data to cvt buffer;
+    // suddenly becomes signed
+    cvt.len = (*wav_length) * wav_spec.channels;            // the buffer length
+    cvt.buf = (uint8_t*)SDL_malloc(cvt.len * cvt.len_mult); // allocate size for the new buffer
+    memcpy(cvt.buf, *wav_buffer, *wav_length);              // copy wav data to cvt buffer;
 
     // convert
     SDL_ConvertAudio(&cvt);
@@ -56,8 +62,8 @@ static void convert_audio(const AudioDevice* audio_device, const SDL_AudioSpec w
 
 // loads a WAV file and returns the relevant information
 AudioData audio_load_wav(const AudioDevice* audio_device, const char* file_path) {
-    SDL_AudioSpec wav_spec;
-    AudioData audio;
+    SDL_AudioSpec wav_spec = {0};
+    AudioData audio = {0};
 
     SDL_LoadWAV(file_path, &wav_spec, &audio.buffer, &audio.length);
     convert_audio(audio_device, wav_spec, &audio.buffer, &audio.length);
@@ -67,7 +73,7 @@ AudioData audio_load_wav(const AudioDevice* audio_device, const char* file_path)
 }
 
 // initializes the audio device
-AudioDevice* audio_device_init(const int32_t freq, const SDL_AudioFormat format, const uint8_t channels, const uint8_t samples) {
+AudioDevice* audio_device_init(const int32_t freq, const SDL_AudioFormat format, const uint8_t channels, const Uint16 samples) {
     // allocate memory for the audio device
     AudioDevice* audio_device = malloc(sizeof(AudioDevice));
 
@@ -100,7 +106,7 @@ AudioDevice* audio_device_init(const int32_t freq, const SDL_AudioFormat format,
 void audio_play(const AudioDevice* audio_device, const AudioData audio) {
     AudioData* playing_audio = audio_device->playing_audio;
 
-    for (int i = 0; i < MAX_SOUNDS; i++) {
+    for (int32_t i = 0; i < MAX_SOUNDS; i++) {
         // overrite audio that has been deallocated
         if (playing_audio[i].length <= 0) {
             // override the audio

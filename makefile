@@ -36,15 +36,15 @@ $(TARGET): $(OBJ)
 
 # creates .o and .d files, include a flag for no unused command line arguments, because in this context it's unneeded
 $(DIR_OBJ)/$(ARCH)/%.o: src/%.c
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
 
 $(DIR):
-	mkdir -p $@
+	@mkdir -p $@
 
 # update compile commands if the makefile has been updated (for linting)
 compile_commands.json: makefile
-	touch compile_commands.json
+	@touch compile_commands.json
 	$(MAKE) clean
 	bear -- make
 

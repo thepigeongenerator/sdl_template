@@ -1,5 +1,6 @@
 #pragma once
-#include <SDL.h>
+#include <SDL_render.h>
+#include <SDL_video.h>
 
 typedef struct {
     SDL_Window* window;

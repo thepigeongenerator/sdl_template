@@ -1,14 +1,20 @@
 #include "main.h"
 
 #include <SDL.h>
+#include <SDL_error.h>
+#include <SDL_events.h>
+#include <SDL_keyboard.h>
+#include <SDL_render.h>
+#include <SDL_video.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "errors.h"
 #include "game/game.h"
-#include "window/audio.h"
+// #include "window/audio.h"
 #include "window/renderer.h"
 
 #ifdef __EMSCRIPTEN__ // for web builds
@@ -36,8 +42,8 @@ static void init(void) {
     }
 
     // initialize audio
-    AudioDevice* audio_device = audio_device_init(32000, AUDIO_S16, 1, 255);
-    //AudioData audio1 = audio_load_wav(audio_device, "FILE NAME");
+    // AudioDevice* audio_device = audio_device_init(32000, AUDIO_S16, 1, 255);
+    // AudioData audio1 = audio_load_wav(audio_device, "FILE NAME");
 }
 
 // handles game application updating
@@ -55,7 +61,7 @@ static void update(void) {
     }
 
     // updates the game
-    game_update((GameData){}, SDL_GetKeyboardState(NULL));
+    game_update((GameData){NULL}, SDL_GetKeyboardState(NULL));
 
     // updates the render
     RenderData render_data = {window, renderer};
@@ -69,6 +75,8 @@ void stop(void) {
 
 // entry point of the application
 int32_t main(int32_t argc, char** argv) {
+    (void)argc;
+    (void)argv;
     init();
 
     while (playing)

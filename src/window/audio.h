@@ -1,5 +1,7 @@
 #pragma once
-#include <SDL.h>
+
+#include <SDL_audio.h>
+#include <stdint.h>
 
 typedef struct {
     uint32_t length;
@@ -17,5 +19,5 @@ typedef struct {
 
 
 AudioData audio_load_wav(const AudioDevice* audio_device, const char* file_path);
-AudioDevice* audio_device_init(const int32_t freq, const SDL_AudioFormat format, const uint8_t channels, const uint8_t samples);
+AudioDevice* audio_device_init(const int freq, const SDL_AudioFormat format, const uint8_t channels, const uint16_t samples);
 void audio_play(const AudioDevice* audio_device, const AudioData audio);

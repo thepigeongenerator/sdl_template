@@ -43,9 +43,13 @@ $(DIR):
 	@mkdir -p $@
 
 # update compile commands if the makefile has been updated (for linting)
+ifeq ($(NO_CMDS),1)
+compile_commands.json: makefile
+else
 compile_commands.json: makefile
 	@touch compile_commands.json
 	$(MAKE) clean
 	bear -- make
+endif
 
 -include $(DEP)

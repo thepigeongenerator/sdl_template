@@ -8,10 +8,12 @@
             "program": "",
             "linux": {
                 "program": "${workspaceFolder}/bin/linux-x86_64/sdl_template",
+                "cwd": "${workspaceFolder}/bin/linux-x86_64",
                 "preLaunchTask": "build linux-x86_64"
             },
             "windows": {
                 "program": "${workspaceFolder}/bin/win-x86_64/sdl_template",
+                "cwd": "${workspaceFolder}/bin/win-x86_64",
                 "preLaunchTask": "build win-x86_64"
             },
             "args": [],

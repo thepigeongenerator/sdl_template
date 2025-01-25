@@ -13,9 +13,13 @@ DIR_OBJ := obj
 DIR := $(DIR_BIN)/$(ARCH) $(DIR_OBJ)/$(ARCH)
 
 SRC := $(wildcard src/*.c) $(wildcard src/**/*.c) $(wildcard src/**/**/*.c) $(wildcard src/**/**/**/*.c) $(wildcard src/**/**/**/**/*.c)
+SRC_ASSETS := $(wildcard assets/*)
+
 OBJ := $(patsubst src/%,$(DIR_OBJ)/$(ARCH)/%,$(SRC:.c=.o))
 DEP := $(OBJ:.o=.d)
+ASSETS := $(patsubst assets/%,$(DIR_BIN)/$(ARCH)/%,$(SRC_ASSETS))
 TARGET := $(DIR_BIN)/$(ARCH)/$(NAME)$(EXT)
+
 
 # sets the variables for the different targets
 linux-x86_64:
@@ -26,7 +30,7 @@ web:
 	$(MAKE) build ARCH=web CC=emcc EXT=".html"
 
 all: linux-x86_64 win-x86_64 web
-build: $(DIR) $(TARGET) compile_commands.json
+build: $(DIR) $(TARGET) $(ASSETS) compile_commands.json
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ)
 
@@ -38,6 +42,11 @@ $(TARGET): $(OBJ)
 $(DIR_OBJ)/$(ARCH)/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
+
+# copy the assets
+$(DIR_BIN)/$(ARCH)/%: assets/%
+	@mkdir -p $(dir $@)
+	cp $< $@
 
 $(DIR):
 	@mkdir -p $@

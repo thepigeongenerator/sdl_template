@@ -1,16 +1,15 @@
 NAME = sdl_template
 
 # compiler settings
-CC ?= clang
+CC := clang
 STD := c17
 LANG = c
-CFLAGS ?= $(shell pkg-config --cflags sdl2) -Wall -g -pedantic
-LDFLAGS ?= $(shell pkg-config --libs sdl2) -lm
+CFLAGS := $(shell pkg-config --cflags sdl2) -Wall -g -pedantic
+LDFLAGS := $(shell pkg-config --libs sdl2) -lm
 
 # dirs
 DIR_BIN := bin
 DIR_OBJ := obj
-ARCH ?=
 DIR := $(DIR_BIN)/$(ARCH) $(DIR_OBJ)/$(ARCH)
 
 # source files

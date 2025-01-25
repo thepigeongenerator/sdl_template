@@ -1,20 +1,23 @@
 NAME = sdl_template
 
 # compiler settings
-CC := clang
+CC ?= clang
 STD := c17
 LANG = c
-CFLAGS := $(shell pkg-config --cflags sdl2) -Wall -g -pedantic
-LDFLAGS := $(shell pkg-config --libs sdl2) -lm
+CFLAGS ?= $(shell pkg-config --cflags sdl2) -Wall -g -pedantic
+LDFLAGS ?= $(shell pkg-config --libs sdl2) -lm
 
-# file locations
+# dirs
 DIR_BIN := bin
 DIR_OBJ := obj
+ARCH ?=
 DIR := $(DIR_BIN)/$(ARCH) $(DIR_OBJ)/$(ARCH)
 
+# source files
 SRC := $(wildcard src/*.c) $(wildcard src/**/*.c) $(wildcard src/**/**/*.c) $(wildcard src/**/**/**/*.c) $(wildcard src/**/**/**/**/*.c)
 SRC_ASSETS := $(wildcard assets/*)
 
+# output locations
 OBJ := $(patsubst src/%,$(DIR_OBJ)/$(ARCH)/%,$(SRC:.c=.o))
 DEP := $(OBJ:.o=.d)
 ASSETS := $(patsubst assets/%,$(DIR_BIN)/$(ARCH)/%,$(SRC_ASSETS))
@@ -34,20 +37,21 @@ build: $(DIR) $(TARGET) $(ASSETS) compile_commands.json
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ)
 
-# creates the binary
+# create the binary
 $(TARGET): $(OBJ)
 	$(CC) -o $(TARGET) $^ $(CFLAGS) $(LDFLAGS)
 
-# creates .o and .d files, include a flag for no unused command line arguments, because in this context it's unneeded
+# create .o and .d files
 $(DIR_OBJ)/$(ARCH)/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
 
-# copy the assets
+# copy assets
 $(DIR_BIN)/$(ARCH)/%: assets/%
 	@mkdir -p $(dir $@)
 	cp $< $@
 
+# create directories
 $(DIR):
 	@mkdir -p $@
 
@@ -61,4 +65,5 @@ compile_commands.json: makefile
 	bear -- make
 endif
 
+# include the dependencies
 -include $(DEP)

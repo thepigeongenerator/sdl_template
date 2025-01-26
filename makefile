@@ -4,8 +4,14 @@ NAME = sdl_template
 CC := clang
 STD := c17
 LANG = c
-CFLAGS := $(shell pkg-config --cflags sdl2) -O3 -g -Wall -Wall -Wextra -Wpedantic -Wno-pointer-arith
+CFLAGS := $(shell pkg-config --cflags sdl2) -Wall -Wall -Wextra -Wpedantic -Wno-pointer-arith
 LDFLAGS := $(shell pkg-config --libs sdl2) -lm
+
+ifeq ($(DEBUG),1)
+CFLAGS += -Og -g
+else
+REL_FLAGS += -O3
+endif
 
 # dirs
 DIR_BIN := bin

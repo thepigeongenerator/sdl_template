@@ -1,4 +1,4 @@
-NAME = sdl_template
+NAME := sdl_template
 
 # compiler settings
 CC := clang

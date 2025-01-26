@@ -16,6 +16,7 @@ endif
 # dirs
 DIR_BIN := bin
 DIR_OBJ := obj
+DIR_BUILD := $(DIR_BIN)/$(ARCH)
 DIR := $(DIR_BIN)/$(ARCH) $(DIR_OBJ)/$(ARCH)
 
 # source files
@@ -25,34 +26,39 @@ SRC_ASSETS := $(wildcard assets/*)
 # output locations
 OBJ := $(patsubst src/%,$(DIR_OBJ)/$(ARCH)/%,$(SRC:.c=.o))
 DEP := $(OBJ:.o=.d)
-ASSETS := $(patsubst assets/%,$(DIR_BIN)/$(ARCH)/%,$(SRC_ASSETS))
-TARGET := $(DIR_BIN)/$(ARCH)/$(NAME)$(EXT)
+ASSETS := $(patsubst assets/%,$(DIR_BUILD)/%,$(SRC_ASSETS))
+TARGET := $(DIR_BUILD)/$(NAME)$(EXT)
 
 
 # sets the variables for the different targets
 linux-x86_64:
-	$(MAKE) build ARCH=linux-x86_64 CFLAGS="$(CFLAGS) -target x86_64-pc-linux-gnu"
+	@$(MAKE) _build ARCH=linux-x86_64 CFLAGS="$(CFLAGS) -target x86_64-pc-linux-gnu"
 win-x86_64:
-	$(MAKE) build ARCH=win-x86-64 CFLAGS="$(CFLAGS) -target x86_64-pc-windows-gnu" EXT=".exe"
+	@$(MAKE) _build ARCH=win-x86-64 CFLAGS="$(CFLAGS) -target x86_64-pc-windows-gnu" EXT=".exe"
 web:
-	$(MAKE) build ARCH=web CC=emcc EXT=".html"
+	@$(MAKE) _build ARCH=web CC=emcc EXT=".html"
+
+# execute the binary
+run: $(ARCH)
+	cd $(DIR_BUILD) && ./$(NAME)$(EXT)
 
 all: linux-x86_64 win-x86_64 web
-build: $(DIR) $(TARGET) $(ASSETS) compile_commands.json
+_build: $(DIR) $(TARGET) $(ASSETS) compile_commands.json
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ)
 
 # create the binary
 $(TARGET): $(OBJ)
-	$(CC) -o $(TARGET) $^ $(CFLAGS) $(LDFLAGS)
+	@echo "using arguments: $(CFLAGS) $(LDFLAGS)"
+	@$(CC) -o $(TARGET) $^ $(CFLAGS) $(LDFLAGS)
 
 # create .o and .d files
 $(DIR_OBJ)/$(ARCH)/%.o: src/%.c
 	@mkdir -p $(dir $@)
-	$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
+	@$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
 
 # copy assets
-$(DIR_BIN)/$(ARCH)/%: assets/%
+$(DIR_BUILD)/%: assets/%
 	@mkdir -p $(dir $@)
 	cp $< $@
 
@@ -61,7 +67,7 @@ $(DIR):
 	@mkdir -p $@
 
 # update compile commands if the makefile has been updated (for linting)
-ifeq ($(NO_CMDS),1)
+ifeq ($(DEBUG),1)
 compile_commands.json: makefile
 else
 compile_commands.json: makefile

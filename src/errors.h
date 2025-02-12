@@ -1,6 +1,9 @@
 #pragma once
+#include <stdint.h>
 
-typedef unsigned char ErrorCode;
+#define ERROR_MAX_STR_LEN 128
+
+typedef uint8_t error_code;
 enum {
     ERROR_MISC = -1,
 
@@ -21,5 +24,5 @@ enum {
 };
 
 // call when a fatal error has occurred, the program will immediately terminate when called
-void error(const ErrorCode error_code, const char* format, ...);
-void warn(const char* format, ...);
+void error(error_code const error_code, char const* format, ...);
+void warn(char const* format, ...);

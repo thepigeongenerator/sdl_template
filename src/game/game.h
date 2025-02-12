@@ -4,7 +4,8 @@
 // stores the data used in the game
 typedef struct {
     void* val;
-} GameData;
+} game_data;
 
 // updates the game's state
-void game_update(GameData game_data, const uint8_t* keys);
+void game_init(game_data* game_dat);
+void game_update(game_data* game_dat, const uint8_t* keys);

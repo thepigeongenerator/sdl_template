@@ -10,9 +10,8 @@ typedef union {
         uint8_t r : 3;
     };
 } colour8;
-#define color8 colour8
 
-/*                                          rrrg ggbb */
+/*                                           rrrg ggbb */
 #define COLOUR8_BLACK   ((colour8){0x00}) // 0000 0000
 #define COLOUR8_RED     ((colour8){0xE0}) // 1110 0000
 #define COLOUR8_YELLOW  ((colour8){0xFC}) // 1111 1100
@@ -37,3 +36,15 @@ static inline uint8_t colour8_green32(colour8 const colour) {
 static inline uint8_t colour8_blue32(colour8 const colour) {
     return colour.b * (255 / 3);
 }
+
+// american macros:
+#define color8         colour8
+#define COLOR8_BLACK   COLOUR8_BLACK
+#define COLOR8_RED     COLOUR8_RED
+#define COLOR8_YELLOW  COLOUR8_YELLOW
+#define COLOR8_ORANGE  COLOUR8_ORANGE
+#define COLOR8_GREEN   COLOUR8_GREEN
+#define COLOR8_CYAN    COLOUR8_CYAN
+#define COLOR8_BLUE    COLOUR8_BLUE
+#define COLOR8_MAGENTA COLOUR8_MAGENTA
+#define COLOR8_WHITE   COLOUR8_WHITE

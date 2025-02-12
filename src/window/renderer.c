@@ -1,4 +1,3 @@
-// initializes the window and renderer
 #include "renderer.h"
 
 #include <SDL_error.h>
@@ -7,27 +6,29 @@
 #include <stdio.h>
 
 #include "../errors.h"
+#include "../game/game.h"
 
 
-int renderer_init(SDL_Window** window, SDL_Renderer** renderer) {
+// initializes the window and renderer
+void renderer_init(render_data* const render_dat, game_data const* const game_dat) {
     // create a new window
-    *window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 100, 100, SDL_WINDOW_SHOWN);
-    if (*window == NULL) {
+    SDL_Window* const window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 100, 100, SDL_WINDOW_SHOWN);
+    if (window == NULL)
         error(ERROR_SDL_RENDERER_INIT, "Window failed to be created! SDL Error: %s", SDL_GetError());
-        return -1;
-    }
 
     // create a renderer
-    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_PRESENTVSYNC);
-    if (*renderer == NULL) {
+    SDL_Renderer* const renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == NULL)
         error(ERROR_SDL_RENDERER_INIT, "Renderer failed to be created! SDL Error: %s", SDL_GetError());
-        return -1;
-    }
 
-    return 0;
+    *render_dat = (render_data){
+        window,
+        renderer,
+        game_dat,
+    };
 }
 
-void renderer_update(const RenderData* render_data) {
+void renderer_update(const render_data* render_data) {
     SDL_Renderer* renderer = render_data->renderer;
 
     int success = 0; // if an error occurs, this value is <0

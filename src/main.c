@@ -4,8 +4,6 @@
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_keyboard.h>
-#include <SDL_render.h>
-#include <SDL_video.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -14,18 +12,12 @@
 
 #include "errors.h"
 #include "game/game.h"
-// #include "window/audio.h"
 #include "window/renderer.h"
-
-#ifdef __EMSCRIPTEN__ // for web builds
-#include <emscripten.h>
-#endif
-
 
 bool playing = true;
 
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
+render_data render_dat = {0};
+game_data game_dat = {0};
 
 // handles game application initialisation
 static void init(void) {
@@ -35,15 +27,13 @@ static void init(void) {
         return;
     }
 
-    // initialize the renderer
-    if (renderer_init(&window, &renderer) < 0) {
-        error(ERROR_SDL_RENDERER_INIT, SDL_GetError());
-        return;
-    }
+    renderer_init(&render_dat, &game_dat);
 
     // initialize audio
     // AudioDevice* audio_device = audio_device_init(32000, AUDIO_S16, 1, 255);
+
     // AudioData audio1 = audio_load_wav(audio_device, "FILE NAME");
+    game_init(&game_dat);
 }
 
 // handles game application updating
@@ -60,12 +50,9 @@ static void update(void) {
         }
     }
 
-    // updates the game
-    game_update((GameData){NULL}, SDL_GetKeyboardState(NULL));
-
-    // updates the render
-    RenderData render_data = {window, renderer};
-    renderer_update(&render_data);
+    // perform updates
+    game_update(&game_dat, SDL_GetKeyboardState(NULL));
+    renderer_update(&render_dat);
 }
 
 // handles game application quitting

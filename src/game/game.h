@@ -3,7 +3,7 @@
 
 // stores the data used in the game
 typedef struct {
-    void* val;
+    uint8_t tmp;
 } game_data;
 
 // updates the game's state

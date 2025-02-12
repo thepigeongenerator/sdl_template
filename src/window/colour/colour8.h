@@ -39,6 +39,9 @@ static inline uint8_t colour8_blue32(colour8 const colour) {
 
 // american macros:
 #define color8         colour8
+#define color8_red32   colour8_red32
+#define color8_green32 colour8_green32
+#define color8_blue32  colour8_blue32
 #define COLOR8_BLACK   COLOUR8_BLACK
 #define COLOR8_RED     COLOUR8_RED
 #define COLOR8_YELLOW  COLOUR8_YELLOW

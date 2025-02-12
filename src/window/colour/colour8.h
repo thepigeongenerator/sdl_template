@@ -1,7 +1,9 @@
 #pragma once
 #include <stdint.h>
 
-// fits colours with each channel having a width of 2 bits
+#include "SDL_render.h"
+
+// stores colour in a rrrgggbb format, which maps exactly to 8 bits
 typedef union {
     uint8_t packed;
     struct {
@@ -35,6 +37,11 @@ static inline uint8_t colour8_green32(colour8 const colour) {
 // gets the blue channel in 32 bit colour space
 static inline uint8_t colour8_blue32(colour8 const colour) {
     return colour.b * (255 / 3);
+}
+
+// sets the render colour to a colour8 value
+static inline void set_colour8(SDL_Renderer* const renderer, colour8 const c) {
+    (void)SDL_SetRenderDrawColor(renderer, colour8_red32(c), colour8_green32(c), colour8_blue32(c), 0xFF);
 }
 
 // american macros:

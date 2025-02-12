@@ -1,7 +1,9 @@
 #pragma once
 #include <stdint.h>
 
-// fits colours with each channel having a width of 2 bits
+#include "SDL_render.h"
+
+// stores colour in a rgba format, each channel being a 8 bits wide.
 typedef union {
     uint32_t packed;
     struct {
@@ -21,6 +23,12 @@ typedef union {
 #define COLOUR32_BLUE    ((colour32){0x0000FFFF})
 #define COLOUR32_MAGENTA ((colour32){0xFF00FFFF})
 #define COLOUR32_WHITE   ((colour32){0xFFFFFFFF})
+
+
+// sets the render colour to a colour32 value
+static inline void set_colour32(SDL_Renderer* const renderer, colour32 const c) {
+    (void)SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+}
 
 
 // american macros:

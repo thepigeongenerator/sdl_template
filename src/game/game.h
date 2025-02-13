@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+
 #include "gametime.h"
 
 typedef struct {

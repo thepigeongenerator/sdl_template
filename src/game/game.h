@@ -1,9 +1,10 @@
 #pragma once
 
 #include <stdint.h>
+#include "gametime.h"
 
 typedef struct {
-    uint8_t tmp;
+    gametime time;
 } game_data;
 
 void game_init(game_data*);   // initializes everything needed to start the game; outputs to game_data

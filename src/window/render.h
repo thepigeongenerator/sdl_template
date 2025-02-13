@@ -13,5 +13,5 @@ typedef struct {
 } renderdata;
 
 void render_init(renderdata*, gamedata const*); // initializes the renderer, outputs to render_data
-void render_update(renderdata const*);           // causes a draw to occur, will also determine update rate
-void render_free(renderdata*);                   // frees the memory allocated to the renderer in render_data
+void render_update(renderdata const*);          // causes a draw to occur, will also determine update rate
+void render_free(renderdata*);                  // frees the memory allocated to the renderer in render_data

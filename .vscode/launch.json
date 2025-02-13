@@ -5,6 +5,9 @@
             "name": "(lldb) debug project",
             "type": "lldb",
             "request": "launch",
+            "env": {
+                "DEBUG": "1"
+            },
             "program": "",
             "linux": {
                 "preLaunchTask": "(dbg) compile linux-x86_64",

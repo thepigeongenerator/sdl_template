@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 #include "SDL_messagebox.h"
-#include "main.h"
 
 #define PRINT_BUFFER_SIZE 128 // defines the buffer size for printing
 
@@ -17,9 +16,10 @@
     (void)vsnprintf(buf, PRINT_BUFFER_SIZE, fmt, args); \
     va_end(args);
 
-// sets the game status (in turn exiting (if not set to STATUS_RUNNING))
-static void stop(gamestatus status) {
-    set_gamestatus(status);
+static gamestatus status = STATUS_RUNNING;
+
+gamestatus get_gamestatus(void) {
+    return status;
 }
 
 void debug(char const* fmt, ...) {
@@ -45,10 +45,10 @@ void warn(char const* fmt, ...) {
     (void)fprintf(stderr, "\033[93mW: %s\033[0m\n", buf);
 }
 
-void error(gamestatus status, char const* fmt, ...) {
+void error(gamestatus error_code, char const* fmt, ...) {
     char buf[PRINT_BUFFER_SIZE] = {0};
     write_args(buf, fmt);
     (void)fprintf(stderr, "\033[91mE: %s\033[0m\n", buf);
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "something went wrong! :O", buf, NULL);
-    stop(status);
+    status = error_code;
 }

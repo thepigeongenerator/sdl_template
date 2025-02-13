@@ -50,5 +50,8 @@ void error(gamestatus error_code, char const* fmt, ...) {
     write_args(buf, fmt);
     (void)fprintf(stderr, "\033[91mE: %s\033[0m\n", buf);
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "something went wrong! :O", buf, NULL);
+
+    // set status, but exit immediately, as code is not allowed to execute beyond this point
     status = error_code;
+    exit(status);
 }

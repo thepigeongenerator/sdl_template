@@ -1,4 +1,4 @@
-#include "error_handling.h"
+#include "error.h"
 
 #include <stdarg.h>
 #include <stdint.h>

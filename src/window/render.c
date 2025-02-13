@@ -1,6 +1,6 @@
 #include "render.h"
 
-#include "../error_handling.h"
+#include "../error.h"
 #include "../game/game.h"
 
 void render_init(render_data* const rdat, game_data const* const gdat) {

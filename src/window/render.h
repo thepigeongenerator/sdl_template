@@ -9,9 +9,9 @@
 typedef struct {
     SDL_Window* window;
     SDL_Renderer* renderer;
-    game_data const* gdat;
-} render_data;
+    gamedata const* gdat;
+} renderdata;
 
-void render_init(render_data*, game_data const*); // initializes the renderer, outputs to render_data
-void render_update(render_data const*);           // causes a draw to occur, will also determine update rate
-void render_free(render_data*);                   // frees the memory allocated to the renderer in render_data
+void render_init(renderdata*, gamedata const*); // initializes the renderer, outputs to render_data
+void render_update(renderdata const*);           // causes a draw to occur, will also determine update rate
+void render_free(renderdata*);                   // frees the memory allocated to the renderer in render_data

@@ -11,7 +11,7 @@
 #include "../game/game.h"
 #include "colour/colour32.h"
 
-void render_init(render_data* const rdat, game_data const* const gdat) {
+void render_init(renderdata* const rdat, gamedata const* const gdat) {
     SDL_Window* const window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 100, 100, SDL_WINDOW_SHOWN);
     if (window == NULL)
         error(ERROR_SDL_RENDERING_INIT, "failed to create a window. SDL Error: %s", SDL_GetError());
@@ -21,14 +21,14 @@ void render_init(render_data* const rdat, game_data const* const gdat) {
     if (renderer == NULL)
         error(ERROR_SDL_RENDERING_INIT, "failed to create a renderer. SDL Error: %s", SDL_GetError());
 
-    *rdat = (render_data){
+    *rdat = (renderdata){
         window,
         renderer,
         gdat,
     };
 }
 
-void render_update(render_data const* const rdat) {
+void render_update(renderdata const* const rdat) {
     set_colour32(rdat->renderer, COLOUR32_BLACK);
     SDL_RenderClear(rdat->renderer);
 
@@ -36,7 +36,7 @@ void render_update(render_data const* const rdat) {
     SDL_RenderPresent(rdat->renderer);
 }
 
-void render_free(render_data* const rdat) {
+void render_free(renderdata* const rdat) {
     (void)rdat;
     error(STATUS_ERROR, "function render_free(render_data*) not implemented");
 }

@@ -2,16 +2,16 @@
 
 #include "gametime.h"
 
-void game_init(game_data* dat) {
-    *dat = (game_data){
+void game_init(gamedata* dat) {
+    *dat = (gamedata){
         gametime_new(),
     };
 }
 
-void game_update(game_data* dat) {
+void game_update(gamedata* dat) {
     gametime_update(&dat->time);
 }
 
-void game_free(game_data* dat) {
+void game_free(gamedata* dat) {
     (void)dat;
 }

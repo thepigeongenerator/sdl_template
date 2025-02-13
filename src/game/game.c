@@ -1,6 +1,6 @@
 #include "game.h"
 
-#include "../error_handling.h"
+#include "../error.h"
 
 void game_init(game_data* dat) {
     (void)dat;

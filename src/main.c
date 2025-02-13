@@ -8,8 +8,8 @@
 #include "game/game.h"
 #include "window/render.h"
 
-static game_data gdat;   // initialized in init(), reading beforehand is undefined behaviour
-static render_data rdat; // initialized in init(), reading beforehand is undefined behaviour
+static gamedata gdat;   // initialized in init(), reading beforehand is undefined behaviour
+static renderdata rdat; // initialized in init(), reading beforehand is undefined behaviour
 
 // initialize the game
 static void init(void) {

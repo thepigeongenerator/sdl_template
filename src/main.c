@@ -1,17 +1,30 @@
-#include "main.h"
-
 #include <stdint.h>
 
 #include "error_handling.h"
+#include "game/game.h"
+#include "window/render.h"
 
-static gamestatus status = STATUS_RUNNING;
+static game_data gdat;   // initialized in init(), reading beforehand is undefined behaviour
+static render_data rdat; // initialized in init(), reading beforehand is undefined behaviour
 
-void set_gamestatus(gamestatus new_status) {
-    status = new_status;
+static void init(void) {
+    game_init(&gdat);
+    render_init(&rdat, &gdat);
+}
+
+static void update(void) {
+    // perform updates
+    game_update(&gdat);
+    render_update(&rdat);
 }
 
 int32_t main(int32_t argc, char** argv) {
     (void)argc, (void)argv;
-    debug("%s", "Hello, World!");
-    return status;
+
+    init();
+
+    while (get_gamestatus() == STATUS_RUNNING)
+        update();
+
+    return get_gamestatus();
 }

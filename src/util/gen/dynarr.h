@@ -24,8 +24,6 @@
 #endif // DYNARR_NAME
 
 #define DYNARR_FUNC(name) DYNARR_COMB1(DYNARR_NAME, _##name) // name of the initialization funcition
-// TODO: add bulk addition function
-// TODO: add bulk deletion function
 
 // define the dynamic array structure
 typedef struct {
@@ -88,6 +86,8 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(add)(DYNARR_NAME* arr, DYNARR_TYPE item) {
     return 0;
 }
 
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(add_bulk)(DYNARR_NAME* arr); // TODO: implement
+
 // trims the parts of the dynamic array that isn't in use (does not respect scaling, if not desirable use `shrink` instead)
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink_exact)(DYNARR_NAME* arr) {
     if (arr->cap == arr->count) return 0; // return success if no work needs to be done
@@ -120,6 +120,8 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
 
     return 0;
 }
+
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk)(DYNARR_NAME* arr); // TODO: implement
 
 // cleans up the resources associated with the array, do not use after this step. This is undefined behaviour
 DYNARR_LINKAGE void DYNARR_FUNC(free)(DYNARR_NAME* arr) {

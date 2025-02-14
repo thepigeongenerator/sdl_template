@@ -6,7 +6,7 @@
 #define DYNARR_COMB2(a, b) a##b
 #define DYNARR_COMB1(a, b) DYNARR_COMB2(a, b)
 #endif // DYNARR_H
-#define DYNARR_TYPE float
+
 #ifdef DYNARR_TYPE
 #include <stdlib.h>
 #include <string.h>

@@ -4,8 +4,6 @@
 #define VEC2_COMB1(a, b) VEC2_COMB2(a, b)
 #endif
 
-#define VEC2_TYPE int
-
 #ifdef VEC2_TYPE
 
 // customising the linkage

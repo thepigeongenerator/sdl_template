@@ -24,10 +24,8 @@
 #endif // DYNARR_NAME
 
 #define DYNARR_FUNC(name) DYNARR_COMB1(DYNARR_NAME, _##name) // name of the initialization funcition
-// TODO: add shrink function (call when count < cap / 4)
 // TODO: add bulk addition function
 // TODO: add bulk deletion function
-
 
 // define the dynamic array structure
 typedef struct {
@@ -90,6 +88,18 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(add)(DYNARR_NAME* arr, DYNARR_TYPE item) {
     return 0;
 }
 
+// trims the parts of the dynamic array that isn't in use (does not respect scaling, if not desirable use `shrink` instead)
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink_exact)(DYNARR_NAME* arr) {
+    if (arr->cap == arr->count) return 0; // return success if no work needs to be done
+    return DYNARR_FUNC(resize_exact)(arr, arr->count);
+}
+
+// trims the parts of the dynamic array that isn't in use (respects scaling, if not desirable use `shrink_exact` instead)
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink)(DYNARR_NAME* arr) {
+    if (arr->cap == arr->count) return 0; // return success if no work needs to be done
+    return DYNARR_FUNC(resize)(arr, arr->count);
+}
+
 // removes an item from the dynamic array from a certain index
 // returns 0 upon success, 1 upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
@@ -104,13 +114,11 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
         arr->dat[i] = arr->dat[i + 1]; // +1 is fine, we know the last item exists because we removed 1
     }
 
-    return 0;
-}
+    // shrink the array when the count is one fourth of it's capacity
+    if (arr->count < arr->cap / 4)
+        DYNARR_FUNC(shrink)(arr);
 
-// trims the parts of the dynamic array that isn't in use
-DYNARR_LINKAGE uint8_t DYNARR_FUNC(trim)(DYNARR_NAME* arr) {
-    if (arr->cap == arr->count) return 0; // return success if no work needs to be done
-    return DYNARR_FUNC(resize_exact)(arr, arr->count);
+    return 0;
 }
 
 // cleans up the resources associated with the array, do not use after this step. This is undefined behaviour

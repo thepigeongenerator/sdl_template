@@ -48,7 +48,8 @@ DYNARR_LINKAGE uint8_t DYNARR_add(DYNARR_NAME* arr, DYNARR_TYPE item) {
 
     // resize the dynamic array if the new count has hit the max capacity
     if (arr->cap == arr->count) {
-        arr->cap *= 2;
+        if (!arr->cap) arr->cap = 1; // set the capacity to 1 if it's 0
+        else arr->cap *= 2;          // otherwise, multiply the capacity by 2
         DYNARR_TYPE* nptr = realloc(arr->dat, arr->cap * sizeof(DYNARR_TYPE));
 
         if (nptr == NULL)

@@ -6,11 +6,8 @@
 #define DYNARR_COMB2(a, b) a##b
 #define DYNARR_COMB1(a, b) DYNARR_COMB2(a, b)
 #endif // DYNARR_H
-
 #define DYNARR_TYPE float
-
 #ifdef DYNARR_TYPE
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -24,6 +21,7 @@
 #define DYNARR_NAME DYNARR_COMB1(dynarr_, DYNARR_TYPE)
 #endif // DYNARR_NAME
 
+#define DYNARR_COUNT_MAX  (SIZE_MAX / sizeof(DYNARR_TYPE))
 #define DYNARR_FUNC(name) DYNARR_COMB1(DYNARR_NAME, _##name) // name of the initialization funcition
 
 // define the dynamic array structure
@@ -48,6 +46,7 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize_exact)(DYNARR_NAME* arr, size_t ncap) 
         DYNARR_FUNC(free)(arr);
         return 0;
     }
+
     // (re)allocate the memory for the array
     DYNARR_TYPE* nptr = realloc(arr->dat, ncap * sizeof(DYNARR_TYPE)); // if dat is NULL, behaviour is equivalent to "malloc"
 
@@ -70,23 +69,29 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize)(DYNARR_NAME* arr, size_t ncap) {
         return 0;
     }
 
+    // convert the capacity into a power of 2 by selecting the most significan bit
+    ncap--;                                       // first remove 1, to decrease the most significant bit
+    for (uint16_t i = 1; i < SIZE_WIDTH; i <<= 1) // loop through each bit in size_t
+        ncap |= ncap >> i;                        // OR together the shifted result
+    ncap++;                                       // finally, add one so 0111 -> 1000
+
     // calculates what the new size should be by adding the amount of items to the count
     // assumes scaling factor is 2
-    return DYNARR_FUNC(resize_exact)(arr, 1 << (size_t)ceil(log2(ncap)));
+    return DYNARR_FUNC(resize_exact)(arr, ncap);
 }
 
 // adds an item to the dynamic array, doubles the capacity if the new count exceeds the maximum
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(add_bulk)(DYNARR_NAME* arr, DYNARR_TYPE* dat, size_t datcount, size_t idx) {
-    if (idx > arr->count) return 1;                 // the index is greater than the count
-    if (SIZE_MAX - datcount < arr->count) return 1; // the count will overflow
-    if (datcount != 0) return 1;                    // the count is zero
+    if (idx > arr->count) return 1;                         // the index is greater than the count
+    if (DYNARR_COUNT_MAX - datcount < arr->count) return 1; // the count will overflow
+    if (datcount == 0) return 1;                            // the count is zero
 
-    _Bool insert = idx < arr->count;
+    size_t orgcount = arr->count;
     arr->count += datcount;
 
     // resize the array if the new count has hit the capacity
     if (arr->cap <= arr->count) {
-        if (SIZE_MAX - arr->cap < arr->cap) return 1; // capacity will overflow
+        if (DYNARR_COUNT_MAX - arr->cap < arr->cap) return 1; // capacity will overflow
 
         // resize the capacity, store status in s
         uint8_t const s = !arr->cap
@@ -96,8 +101,9 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(add_bulk)(DYNARR_NAME* arr, DYNARR_TYPE* dat,
     }
 
     // move the data stored at the current position if we must insert
-    if (insert) memmove(&arr->dat[idx + datcount], &arr->dat[idx], datcount);
-    memcpy(&arr->dat[idx], dat, datcount); // copy the original data to the index
+    if (idx < orgcount)
+        memmove(&arr->dat[datcount + idx], &arr->dat[idx], (orgcount - idx) * sizeof(DYNARR_TYPE));
+    memcpy(&arr->dat[idx], dat, datcount * sizeof(DYNARR_TYPE)); // copy the original data to the index
     return 0;
 }
 
@@ -107,16 +113,10 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(add)(DYNARR_NAME* arr, DYNARR_TYPE item) {
     return DYNARR_FUNC(add_bulk)(arr, &item, 1, arr->count);
 }
 
-// trims the parts of the dynamic array that isn't in use (does not respect scaling, if not desirable use `shrink` instead)
-DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink_exact)(DYNARR_NAME* arr) {
-    if (arr->cap == arr->count) return 0; // return success if no work needs to be done
-    return DYNARR_FUNC(resize_exact)(arr, arr->count);
-}
-
-// trims the parts of the dynamic array that isn't in use (respects scaling, if not desirable use `shrink_exact` instead)
+// trims the parts of the dynamic array that isn't in use (does not respect scaling)
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink)(DYNARR_NAME* arr) {
     if (arr->cap == arr->count) return 0; // return success if no work needs to be done
-    return DYNARR_FUNC(resize)(arr, arr->count);
+    return DYNARR_FUNC(resize_exact)(arr, arr->count);
 }
 
 // removes a block of indices from sidx..eidx (inclusive)
@@ -124,7 +124,7 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink)(DYNARR_NAME* arr) {
 // returns non-zero value upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk)(DYNARR_NAME* arr, size_t sidx, size_t eidx) {
     if (arr->count == 0 || sidx >= arr->count || eidx < sidx) return 1;
-    size_t diff = eidx - sidx; // should always be less than count
+    size_t diff = eidx - sidx + 1; // should always be less than or equal to count
     arr->count -= diff;
 
     for (size_t i = sidx; i < arr->count; i++) {
@@ -146,6 +146,7 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
 }
 
 // clean up all defined definitions so they can be used again later
+#undef DYNARR_COUNT_MAX
 #undef DYNARR_FUNC
 #undef DYNARR_NAME
 #undef DYNARR_LINKAGE

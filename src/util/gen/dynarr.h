@@ -12,6 +12,7 @@
 #ifdef DYNARR_TYPE
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 // customising the linkage
 #ifndef DYNARR_LINKAGE
@@ -75,29 +76,36 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize)(DYNARR_NAME* arr, size_t ncap) {
 }
 
 // adds an item to the dynamic array, doubles the capacity if the new count exceeds the maximum
-// returns 0 upon success, 1 upon failure
-DYNARR_LINKAGE uint8_t DYNARR_FUNC(add)(DYNARR_NAME* arr, DYNARR_TYPE item) {
-    size_t idx = arr->count;
-    arr->count++;
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(add_bulk)(DYNARR_NAME* arr, DYNARR_TYPE* dat, size_t datcount, size_t idx) {
+    if (idx > arr->count) return 1;                 // the index is greater than the count
+    if (SIZE_MAX - datcount < arr->count) return 1; // the count will overflow
+    if (datcount != 0) return 1;                    // the count is zero
 
-    // resize the dynamic array if the new count has hit the max capacity
+    _Bool insert = idx < arr->count;
+    arr->count += datcount;
+
+    // resize the array if the new count has hit the capacity
     if (arr->cap <= arr->count) {
-        // fail if the capacity will overflow
-        if ((SIZE_MAX - arr->cap) < arr->cap) return 1;
+        if (SIZE_MAX - arr->cap < arr->cap) return 1; // capacity will overflow
 
-        // resize the capacity, store the status in s
+        // resize the capacity, store status in s
         uint8_t const s = !arr->cap
-                              ? DYNARR_FUNC(resize_exact)(arr, 1)             // set the capacity to 1 if it's 0
+                              ? DYNARR_FUNC(resize_exact)(arr, 1)             // set the capacity to 1 if it currently is 0
                               : DYNARR_FUNC(resize_exact)(arr, arr->cap * 2); // otherwise, multiply the capacity by 2
-        // return 1 upon non-zero
         if (s) return 1;
     }
 
-    arr->dat[idx] = item;
+    // move the data stored at the current position if we must insert
+    if (insert) memmove(&arr->dat[idx + datcount], &arr->dat[idx], datcount);
+    memcpy(&arr->dat[idx], dat, datcount); // copy the original data to the index
     return 0;
 }
 
-DYNARR_LINKAGE uint8_t DYNARR_FUNC(add_bulk)(DYNARR_NAME* arr); // TODO: implement
+// adds an item to the dynamic array, doubles the capacity if the new count exceeds the maximum
+// returns 0 upon success, 1 upon failure
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(add)(DYNARR_NAME* arr, DYNARR_TYPE item) {
+    return DYNARR_FUNC(add_bulk)(arr, &item, 1, arr->count);
+}
 
 // trims the parts of the dynamic array that isn't in use (does not respect scaling, if not desirable use `shrink` instead)
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink_exact)(DYNARR_NAME* arr) {
@@ -111,28 +119,31 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink)(DYNARR_NAME* arr) {
     return DYNARR_FUNC(resize)(arr, arr->count);
 }
 
-// removes an item from the dynamic array from a certain index
-// returns 0 upon success, 1 upon failure
-DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
-    if (arr->count == 0 || idx >= arr->count) return 1;
+// removes a block of indices from sidx..eidx (inclusive)
+// resizes the array if the new size is a quarter of the original size
+// returns non-zero value upon failure
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk)(DYNARR_NAME* arr, size_t sidx, size_t eidx) {
+    if (arr->count == 0 || sidx >= arr->count || eidx < sidx) return 1;
+    size_t diff = eidx - sidx; // should always be less than count
+    arr->count -= diff;
 
-    // remove one from the count
-    arr->count--;
-
-    // update the subsequent items until the count (don't bother with the rest)
-    // will only run if there are subsequent items
-    for (size_t i = idx; i < arr->count; i++) {
-        arr->dat[i] = arr->dat[i + 1]; // +1 is fine, we know the last item exists because we removed 1
+    for (size_t i = sidx; i < arr->count; i++) {
+        arr->dat[i] = arr->dat[i + diff]; // this should be fine as we removed this amount
     }
 
-    // shrink the array when the count is one fourth of it's capacity
+    // shrink the array when the new size is a quarter of the original size
     if (arr->count < arr->cap / 4)
-        DYNARR_FUNC(shrink)(arr);
+        return DYNARR_FUNC(shrink)(arr);
 
     return 0;
 }
 
-DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk)(DYNARR_NAME* arr); // TODO: implement
+// removes an item from the dynamic array from a certain index
+// resizes the array if the new size is a quarter of the original size
+// returns non-zero value upon failure
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
+    return DYNARR_FUNC(remove_bulk)(arr, idx, idx);
+}
 
 // clean up all defined definitions so they can be used again later
 #undef DYNARR_FUNC

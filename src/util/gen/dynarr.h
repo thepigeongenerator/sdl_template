@@ -36,16 +36,15 @@ typedef struct {
     size_t cap;       // contains the capacity of the dynamic array
 } DYNARR_NAME;
 
-// adds an exact number of items to the capacity, does not respect scaling
+// sets the capacity exactly, does not respect capacity scaling use `resize` if capacity scaling must be respected
 // returns 0 upon success, 1 upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize_exact)(DYNARR_NAME* arr, size_t ncap) {
+    if (ncap == 0) return 1;         // cannot set the new capacity to zero
     if (ncap < arr->count) return 1; // the new capacity is smaller than the count, this is very likely unintentional
     if (ncap == arr->cap) return 0;  // the capacity is already the new capacity; no work needs to be done
 
     // (re)allocate the memory for the array
-    DYNARR_TYPE* nptr = (arr->dat == NULL)
-                            ? malloc(ncap * sizeof(DYNARR_TYPE))
-                            : realloc(arr->dat, ncap * sizeof(DYNARR_TYPE));
+    DYNARR_TYPE* nptr = realloc(arr->dat, ncap * sizeof(DYNARR_TYPE)); // if dat is NULL, behaviour is equivalent to "malloc"
 
     // if memory (re)allocation failed; return
     if (nptr == NULL)
@@ -56,15 +55,16 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize_exact)(DYNARR_NAME* arr, size_t ncap) 
     return 0;
 }
 
-// resizes the array by adding `nitems` to the count, respects capacity scaling
+// resizes the capacity, respects capacity scaling, use `resize_exact` if this behaviour isn't desirable (often it is)
 // returns 0 upon success, 1 upon failure
-DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize)(DYNARR_NAME* arr, size_t ncount) {
-    if (ncount < arr->count) return 1; // the new count is less than the current count, this is very likely unintentional
-    if (ncount == arr->cap) return 0;  // the current capacity has already been set to this
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize)(DYNARR_NAME* arr, size_t ncap) {
+    if (ncap == 0) return 1;         // cannot set the new capacity to zero
+    if (ncap < arr->count) return 1; // the new count is less than the current count, this is very likely unintentional
+    if (ncap == arr->cap) return 0;  // the current capacity has already been set to this
 
     // calculates what the new size should be by adding the amount of items to the count
     // assumes scaling factor is 2
-    return DYNARR_FUNC(resize_exact)(arr, 1 << (size_t)ceil(log2(ncount)));
+    return DYNARR_FUNC(resize_exact)(arr, 1 << (size_t)ceil(log2(ncap)));
 }
 
 // adds an item to the dynamic array, doubles the capacity if the new count exceeds the maximum
@@ -74,8 +74,12 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(add)(DYNARR_NAME* arr, DYNARR_TYPE item) {
     arr->count++;
 
     // resize the dynamic array if the new count has hit the max capacity
-    if (arr->cap == arr->count) {
-        uint8_t const s = !arr->cap                                           // if zero
+    if (arr->cap <= arr->count) {
+        // fail if the capacity will overflow
+        if ((SIZE_MAX - arr->cap) < arr->cap) return 1;
+
+        // resize the capacity, store the status in s
+        uint8_t const s = !arr->cap
                               ? DYNARR_FUNC(resize_exact)(arr, 1)             // set the capacity to 1 if it's 0
                               : DYNARR_FUNC(resize_exact)(arr, arr->cap * 2); // otherwise, multiply the capacity by 2
         // return 1 upon non-zero
@@ -111,8 +115,7 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(trim)(DYNARR_NAME* arr) {
 
 // cleans up the resources associated with the array, do not use after this step. This is undefined behaviour
 DYNARR_LINKAGE void DYNARR_FUNC(free)(DYNARR_NAME* arr) {
-    if (arr->dat == NULL) return;
-    free(arr->dat);
+    free(arr->dat);          // free(NULL) is allowed
     *arr = (DYNARR_NAME){0}; // zero out all fields to re-initialize
 }
 

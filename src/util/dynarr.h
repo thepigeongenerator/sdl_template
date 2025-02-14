@@ -2,8 +2,8 @@
 #define DYNARR_H
 #include <stddef.h>
 #include <stdint.h>
-#define DYNARR_COMB1(a, b) DYNARR_COMB2(a, b)
 #define DYNARR_COMB2(a, b) a##b
+#define DYNARR_COMB1(a, b) DYNARR_COMB2(a, b)
 #endif // DYNARR_H
 
 #ifdef DYNARR_TYPE
@@ -85,15 +85,13 @@ DYNARR_LINKAGE void DYNARR_free(DYNARR_NAME* arr) {
 }
 
 // clean up all defined definitions so they can be used again later
-#undef DYNARR_NAME
 #undef DYNARR_init
 #undef DYNARR_add
 #undef DYNARR_remove
-#undef DYNARR_PREFIX
+#undef DYNARR_free
+#undef DYNARR_NAME
 #undef DYNARR_LINKAGE
 #undef DYNARR_TYPE
-#else
-#if __INCLUDE_LEVEL__ != 0
+#elif __INCLUDE_LEVEL__ != 0
 #error define DYNARR_TYPE before including
-#endif // include level
 #endif // DYNARR_TYPE

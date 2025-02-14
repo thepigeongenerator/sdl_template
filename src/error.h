@@ -27,6 +27,7 @@ enum {
 };
 typedef int8_t gamestatus;
 
+void set_gamestatus(gamestatus);          // sets the current status of the game
 gamestatus get_gamestatus(void);          // gets the current status of the game
 void debug(char const*, ...);             // prints a debug message to stdout if the DEBUG environment variable is set, otherwise the call is ignored.
 void info(char const*, ...);              // prints an info message to stdout

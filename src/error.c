@@ -18,6 +18,10 @@
 
 static gamestatus status = STATUS_RUNNING;
 
+void set_gamestatus(gamestatus nstatus) {
+    status = nstatus;
+}
+
 gamestatus get_gamestatus(void) {
     return status;
 }
@@ -52,6 +56,6 @@ void error(gamestatus error_code, char const* fmt, ...) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "something went wrong! :O", buf, NULL);
 
     // set status, but exit immediately, as code is not allowed to execute beyond this point
-    status = error_code;
+    set_gamestatus(error_code);
     exit(status);
 }

@@ -23,6 +23,12 @@
 #define DYNARR_add    DYNARR_COMB1(DYNARR_NAME, _add)    // name of the addition function
 #define DYNARR_remove DYNARR_COMB1(DYNARR_NAME, _remove) // name of the removal function
 #define DYNARR_free   DYNARR_COMB1(DYNARR_NAME, _free)   // name of the freeing function
+// TODO: add shrink function
+// TODO: add resize function
+// TODO: add bulk addition function
+// TODO: add bulk addition function (doesn't respec growth factor)
+// TODO: add bulk deletion function
+
 
 // define the dynamic array structure
 typedef struct {

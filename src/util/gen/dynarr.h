@@ -32,13 +32,21 @@ typedef struct {
     size_t cap;       // contains the capacity of the dynamic array
 } DYNARR_NAME;
 
+// cleans up the resources associated with the array, do not use after this step. This is undefined behaviour
+DYNARR_LINKAGE void DYNARR_FUNC(free)(DYNARR_NAME* arr) {
+    free(arr->dat);          // free(NULL) is allowed
+    *arr = (DYNARR_NAME){0}; // zero out all fields to re-initialize
+}
+
 // sets the capacity exactly, does not respect capacity scaling use `resize` if capacity scaling must be respected
 // returns 0 upon success, 1 upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize_exact)(DYNARR_NAME* arr, size_t ncap) {
-    if (ncap == 0) return 1;         // cannot set the new capacity to zero
     if (ncap < arr->count) return 1; // the new capacity is smaller than the count, this is very likely unintentional
     if (ncap == arr->cap) return 0;  // the capacity is already the new capacity; no work needs to be done
-
+    if (ncap == 0) {
+        DYNARR_FUNC(free)(arr);
+        return 0;
+    }
     // (re)allocate the memory for the array
     DYNARR_TYPE* nptr = realloc(arr->dat, ncap * sizeof(DYNARR_TYPE)); // if dat is NULL, behaviour is equivalent to "malloc"
 
@@ -54,9 +62,12 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize_exact)(DYNARR_NAME* arr, size_t ncap) 
 // resizes the capacity, respects capacity scaling, use `resize_exact` if this behaviour isn't desirable (often it is)
 // returns 0 upon success, 1 upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize)(DYNARR_NAME* arr, size_t ncap) {
-    if (ncap == 0) return 1;         // cannot set the new capacity to zero
     if (ncap < arr->count) return 1; // the new count is less than the current count, this is very likely unintentional
     if (ncap == arr->cap) return 0;  // the current capacity has already been set to this
+    if (ncap == 0) {
+        DYNARR_FUNC(free)(arr);
+        return 0;
+    }
 
     // calculates what the new size should be by adding the amount of items to the count
     // assumes scaling factor is 2
@@ -122,12 +133,6 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
 }
 
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk)(DYNARR_NAME* arr); // TODO: implement
-
-// cleans up the resources associated with the array, do not use after this step. This is undefined behaviour
-DYNARR_LINKAGE void DYNARR_FUNC(free)(DYNARR_NAME* arr) {
-    free(arr->dat);          // free(NULL) is allowed
-    *arr = (DYNARR_NAME){0}; // zero out all fields to re-initialize
-}
 
 // clean up all defined definitions so they can be used again later
 #undef DYNARR_FUNC

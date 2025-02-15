@@ -59,6 +59,10 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize_exact)(DYNARR_NAME* arr, size_t ncap) 
     return 0;
 }
 
+DYNARR_LINKAGE DYNARR_NAME DYNARR_FUNC(init)(void) {
+    return (DYNARR_NAME){0};
+}
+
 // resizes the capacity, respects capacity scaling, use `resize_exact` if this behaviour isn't desirable (often it is)
 // returns 0 upon success, 1 upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize)(DYNARR_NAME* arr, size_t ncap) {
@@ -81,29 +85,27 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(resize)(DYNARR_NAME* arr, size_t ncap) {
 }
 
 // adds an item to the dynamic array, doubles the capacity if the new count exceeds the maximum
+// `dat` is not allowed to overlap with the selected range in the array
+// returns non-zero upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(add_bulk)(DYNARR_NAME* arr, DYNARR_TYPE* dat, size_t datcount, size_t idx) {
     if (idx > arr->count) return 1;                         // the index is greater than the count
     if (DYNARR_COUNT_MAX - datcount < arr->count) return 1; // the count will overflow
-    if (datcount == 0) return 1;                            // the count is zero
+    if (datcount == 0) return 0;                            // the count is zero, nothing needs to be done
 
     size_t orgcount = arr->count;
     arr->count += datcount;
 
     // resize the array if the new count has hit the capacity
     if (arr->cap <= arr->count) {
-        if (DYNARR_COUNT_MAX - arr->cap < arr->cap) return 1; // capacity will overflow
-
-        // resize the capacity, store status in s
-        uint8_t const s = !arr->cap
-                              ? DYNARR_FUNC(resize_exact)(arr, 1)             // set the capacity to 1 if it currently is 0
-                              : DYNARR_FUNC(resize_exact)(arr, arr->cap * 2); // otherwise, multiply the capacity by 2
-        if (s) return 1;
+        // resize the array to the new count using resize (count cannot be a zero-value at this point)
+        if (DYNARR_FUNC(resize)(arr, arr->count))
+            return 1;
     }
 
     // move the data stored at the current position if we must insert
     if (idx < orgcount)
         memmove(&arr->dat[datcount + idx], &arr->dat[idx], (orgcount - idx) * sizeof(DYNARR_TYPE));
-    memcpy(&arr->dat[idx], dat, datcount * sizeof(DYNARR_TYPE)); // copy the original data to the index
+    memcpy(&arr->dat[idx], dat, datcount * sizeof(DYNARR_TYPE)); // copy the original data to the index (do not overlap)
     return 0;
 }
 
@@ -119,17 +121,29 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(shrink)(DYNARR_NAME* arr) {
     return DYNARR_FUNC(resize_exact)(arr, arr->count);
 }
 
+// removes a block of indices from sidx..eidx (inclusive) does not shrink the array afterwards, use `remove_bulk` instead if this is undesirable behaviour
+// returns non-zero value upon failure
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk_noshrink)(DYNARR_NAME* arr, size_t sidx, size_t eidx) {
+    if (arr->count == 0) return 0;    // no work needs to be done
+    if (arr->count <= sidx) return 1; // start index is out of bounds
+    if (arr->count <= eidx) return 1; // end index is out of bounds
+    if (eidx < sidx) return 1;        // end index must be greater than or equal to start index
+
+    _Bool move = eidx < arr->count - 1; // calculate if we should move the memory after what has been removed
+    arr->count -= eidx - sidx + 1;      // should always be less than or equal to count
+
+    if (move)
+        memmove(&arr->dat[sidx], &arr->dat[eidx + 1], arr->count - sidx);
+
+    return 0;
+}
+
 // removes a block of indices from sidx..eidx (inclusive)
-// resizes the array if the new size is a quarter of the original size
+// resizes the array if the new size is a quarter of the original size if this is undesirable, use `remove_bulk_noshrink` instead
 // returns non-zero value upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk)(DYNARR_NAME* arr, size_t sidx, size_t eidx) {
-    if (arr->count == 0 || sidx >= arr->count || eidx < sidx) return 1;
-    size_t diff = eidx - sidx + 1; // should always be less than or equal to count
-    arr->count -= diff;
-
-    for (size_t i = sidx; i < arr->count; i++) {
-        arr->dat[i] = arr->dat[i + diff]; // this should be fine as we removed this amount
-    }
+    if (DYNARR_FUNC(remove_bulk_noshrink)(arr, sidx, eidx))
+        return 1;
 
     // shrink the array when the new size is a quarter of the original size
     if (arr->count < arr->cap / 4)
@@ -138,8 +152,14 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_bulk)(DYNARR_NAME* arr, size_t sidx, s
     return 0;
 }
 
+// removes an item from the dynamic array from a certain index, does not shrink the array afterwards, if this is undesirable, use `remove` instead
+// returns non-zero value upon failure
+DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove_noshrink)(DYNARR_NAME* arr, size_t idx) {
+    return DYNARR_FUNC(remove_bulk_noshrink)(arr, idx, idx);
+}
+
 // removes an item from the dynamic array from a certain index
-// resizes the array if the new size is a quarter of the original size
+// resizes the array if the new size is a quarter of the original size if this is undesirable, use `remove_noshrink` instead
 // returns non-zero value upon failure
 DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
     return DYNARR_FUNC(remove_bulk)(arr, idx, idx);

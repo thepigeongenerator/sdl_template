@@ -2,7 +2,6 @@
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <stdint.h>
-#include <stdlib.h>
 
 #include "error.h"
 #include "game/game.h"
@@ -30,7 +29,7 @@ static void update(void) {
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
             case SDL_QUIT:
-                exit(STATUS_SUCCESS);
+                set_gamestatus(STATUS_SUCCESS);
                 break;
             }
         }
@@ -49,6 +48,12 @@ int32_t main(int32_t argc, char** argv) {
 
     while (get_gamestatus() == STATUS_RUNNING)
         update();
+
+    game_free(&gdat);
+    render_free(&rdat);
+    gdat = (gamedata){0};
+    rdat = (renderdata){0};
+    SDL_Quit();
 
     return get_gamestatus();
 }

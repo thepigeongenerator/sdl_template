@@ -24,5 +24,5 @@ void game_update(gamedata* dat) {
 }
 
 void game_free(gamedata* dat) {
-    (void)dat;
+    *dat = (gamedata){0};
 }

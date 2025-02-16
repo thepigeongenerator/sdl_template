@@ -37,6 +37,7 @@ void render_update(renderdata const* const rdat) {
 }
 
 void render_free(renderdata* const rdat) {
-    (void)rdat;
-    error(STATUS_ERROR, "function render_free(render_data*) not implemented");
+    SDL_DestroyRenderer(rdat->renderer);
+    SDL_DestroyWindow(rdat->window);
+    *rdat = (renderdata){0};
 }

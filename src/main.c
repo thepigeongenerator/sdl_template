@@ -51,8 +51,6 @@ int32_t main(int32_t argc, char** argv) {
 
     game_free(&gdat);
     render_free(&rdat);
-    gdat = (gamedata){0};
-    rdat = (renderdata){0};
     SDL_Quit();
 
     return get_gamestatus();

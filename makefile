@@ -8,7 +8,7 @@ CFLAGS := $(shell pkg-config --cflags sdl2) -Wall -Wextra -Wpedantic -Wno-pointe
 LDFLAGS := $(shell pkg-config --libs sdl2) -lm
 
 ifeq ($(DEBUG),1)
-CFLAGS += -DDEBUG -Og -g
+CFLAGS += -DDEBUG -Og -g -fsanitize=address,undefined,leak,integer
 else
 REL_FLAGS += -O3
 endif

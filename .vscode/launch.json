@@ -6,7 +6,7 @@
             "type": "lldb",
             "request": "launch",
             "env": {
-                "DEBUG": "1"
+                "DEBUG": "1",
             },
             "program": "",
             "linux": {

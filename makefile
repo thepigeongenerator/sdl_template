@@ -8,7 +8,7 @@ CFLAGS := $(shell pkg-config --cflags sdl2) -Wall -Wextra -Wpedantic -Wno-pointe
 LDFLAGS := $(shell pkg-config --libs sdl2) -lm
 
 ifeq ($(DEBUG),1)
-CFLAGS += -DDEBUG -Og -g -fsanitize=address,undefined,leak,integer
+CFLAGS += -DDEBUG -fsanitize=address,undefined,integer -g -Og
 else
 REL_FLAGS += -O3
 endif
@@ -46,7 +46,7 @@ _build: compile_commands.json $(DIR) $(TARGET) $(ASSETS)
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ) compile_commands.json
 
-# create the binary
+# create the binary (linking step)
 $(TARGET): $(OBJ)
 	@$(call wr_colour,"using arguments: $(CFLAGS) $(LDFLAGS)",94)
 	@$(CC) -o $(TARGET) $^ $(CFLAGS) $(LDFLAGS)

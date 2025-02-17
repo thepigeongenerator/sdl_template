@@ -9,22 +9,24 @@ LDFLAGS := $(shell pkg-config --libs sdl2) -lm
 
 ifeq ($(DEBUG),1)
 CFLAGS += -DDEBUG -fsanitize=address,undefined,integer -g -Og
+PROF := dbg
 else
 REL_FLAGS += -O3
+PROF := rel
 endif
 
 # dirs
 DIR_BIN := bin
 DIR_OBJ := obj
-DIR_BUILD := $(DIR_BIN)/$(ARCH)
-DIR := $(DIR_BIN)/$(ARCH) $(DIR_OBJ)/$(ARCH)
+DIR_BUILD := $(DIR_BIN)/$(ARCH)/$(PROF)
+DIR := $(DIR_BIN)/$(ARCH)/$(PROF) $(DIR_OBJ)/$(ARCH)/$(PROF)
 
 # source files
 SRC := $(wildcard src/*.c) $(wildcard src/**/*.c) $(wildcard src/**/**/*.c) $(wildcard src/**/**/**/*.c) $(wildcard src/**/**/**/**/*.c)
 SRC_ASSETS := $(wildcard assets/*)
 
 # output locations
-OBJ := $(patsubst src/%,$(DIR_OBJ)/$(ARCH)/%,$(SRC:.c=.o))
+OBJ := $(patsubst src/%,$(DIR_OBJ)/$(ARCH)/$(PROF)/%,$(SRC:.c=.o))
 DEP := $(OBJ:.o=.d)
 ASSETS := $(patsubst assets/%,$(DIR_BUILD)/%,$(SRC_ASSETS))
 TARGET := $(DIR_BUILD)/$(NAME)$(EXT)
@@ -52,7 +54,7 @@ $(TARGET): $(OBJ)
 	@$(CC) -o $(TARGET) $^ $(CFLAGS) $(LDFLAGS)
 
 # create .o and .d files
-$(DIR_OBJ)/$(ARCH)/%.o: src/%.c
+$(DIR_OBJ)/$(ARCH)/$(PROF)/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
 

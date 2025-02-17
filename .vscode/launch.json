@@ -13,13 +13,13 @@
             "program": "",
             "linux": {
                 "preLaunchTask": "(dbg) compile linux-x86_64",
-                "program": "bin/linux-x86_64/${workspaceFolderBasename}",
-                "cwd": "bin/linux-x86_64/"
+                "program": "${workspaceFolder}/bin/linux-x86_64/dbg/${workspaceFolderBasename}",
+                "cwd": "${workspaceFolder}/bin/linux-x86_64/dbg/"
             },
             "windows": {
                 "preLaunchTask": "(dbg) compile win-x86_64",
-                "program": "bin/win-x86_64/${workspaceFolderBasename}.exe",
-                "cwd": "bin/win-x86_64/"
+                "program": "${workspaceFolder}/bin/linux-x86_64/dbg/${workspaceFolderBasename}.exe",
+                "cwd": "${workspaceFolder}/bin/win-x86_64/dbg/"
             },
         }
     ]

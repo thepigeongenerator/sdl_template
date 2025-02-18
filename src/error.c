@@ -10,6 +10,7 @@
 #define PRINT_BUFFER_SIZE 128 // defines the buffer size for printing
 
 // writes the arguments to the specified buffer
+// using a macro instead of an inline function because fmt otherwise gets horribly messed up
 #define write_args(buf, fmt)                            \
     va_list args;                                       \
     va_start(args, fmt);                                \

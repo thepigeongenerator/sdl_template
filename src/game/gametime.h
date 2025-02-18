@@ -25,7 +25,7 @@ static inline void gametime_update(gametime* gt) {
     gt->ts = ts;
 }
 
-// gets how many times the
+// gets how many times the game updates per second
 static inline float gametime_get_ups(gametime* gt) {
     return 1.0F / gt->deltatime;
 }

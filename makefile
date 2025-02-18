@@ -45,16 +45,17 @@ web:
 
 all: linux-x86_64 win-x86_64 web
 _build: compile_commands.json $(DIR) $(TARGET) $(ASSETS)
-	@$(call wr_colour,"current profile: '$(PROF)'",93)
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ) compile_commands.json
 
 # create the binary (linking step)
-$(TARGET): $(DIR_OBJ) $(OBJ)
+$(TARGET): $(OBJ)
 	@$(call wr_colour,"CC: '$(CC)'",94)
 	@$(call wr_colour,"CFLAGS: '$(CFLAGS)'",94)
 	@$(call wr_colour,"LDFLAGS: '$(LDFLAGS)'",94)
+	@$(call wr_colour,"linking to: '$@'",92)
 	@$(CC) -o $(TARGET) $^ $(CFLAGS) $(LDFLAGS)
+	@$(call wr_colour,"current profile: '$(PROF)'",93)
 
 # create .o and .d files
 $(DIR_OBJ)/$(ARCH)/$(PROF)/%.o: src/%.c

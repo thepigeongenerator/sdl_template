@@ -37,14 +37,15 @@ endef
 
 # sets the variables for the different targets
 linux-x86_64:
-	@$(MAKE) _build ARCH=linux-x86_64 CFLAGS="$(CFLAGS) -target x86_64-pc-linux-gnu"
+	@$(MAKE) _build ARCH=$@ CFLAGS="$(CFLAGS) -target x86_64-pc-linux-gnu"
 win-x86_64:
-	@$(MAKE) _build ARCH=win-x86-64 CFLAGS="$(CFLAGS) -target x86_64-pc-windows-gnu" EXT=".exe"
+	@$(MAKE) _build ARCH=$@ CFLAGS="$(CFLAGS) -target x86_64-pc-windows-gnu" EXT=".exe"
 web:
-	@$(MAKE) _build ARCH=web CC=emcc EXT=".html"
+	@$(MAKE) _build ARCH=$@ CC=emcc EXT=".html"
 
 all: linux-x86_64 win-x86_64 web
 _build: compile_commands.json $(DIR) $(TARGET) $(ASSETS)
+	@$(call wr_colour,"current profile: '$(PROF)'",93)
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ) compile_commands.json
 
@@ -73,16 +74,13 @@ $(DIR):
 # update compile commands if the makefile has been updated (for linting)
 ifeq ($(DEBUG),1)
 compile_commands.json: makefile
-	@$(call wr_colour,"current profile: DEBUG",93)
 	$(MAKE) clean
 	@touch compile_commands.json
-	bear -- make
+	bear -- make $(ARCH)
 else
 compile_commands.json: makefile
-	@$(call wr_colour,"current profile: RELEASE",93)
 	$(MAKE) clean
 	@touch compile_commands.json
-	$(MAKE)
 endif
 
 # include the dependencies

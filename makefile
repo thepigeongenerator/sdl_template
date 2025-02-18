@@ -49,36 +49,40 @@ clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ) compile_commands.json
 
 # create the binary (linking step)
-$(TARGET): $(OBJ)
-	@$(call wr_colour,"using arguments: $(CFLAGS) $(LDFLAGS)",94)
+$(TARGET): $(DIR_OBJ) $(OBJ)
+	@$(call wr_colour,"CC: '$(CC)'",94)
+	@$(call wr_colour,"CFLAGS: '$(CFLAGS)'",94)
+	@$(call wr_colour,"LDFLAGS: '$(LDFLAGS)'",94)
 	@$(CC) -o $(TARGET) $^ $(CFLAGS) $(LDFLAGS)
 
 # create .o and .d files
 $(DIR_OBJ)/$(ARCH)/$(PROF)/%.o: src/%.c
+	@$(call wr_colour,"compiling $(notdir $@) from $(notdir $<)",92)
 	@mkdir -p $(dir $@)
 	@$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
 
 # copy assets
 $(DIR_BUILD)/%: assets/%
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp -v $< $@
 
 # create directories
 $(DIR):
-	@mkdir -p $@
+	mkdir -p $@
 
 # update compile commands if the makefile has been updated (for linting)
 ifeq ($(DEBUG),1)
 compile_commands.json: makefile
-	@$(call wr_colour,"compiling in debug mode",93)
+	@$(call wr_colour,"current profile: DEBUG",93)
 	$(MAKE) clean
 	@touch compile_commands.json
 	bear -- make
 else
 compile_commands.json: makefile
-	@$(call wr_colour,"compiling in non-debug mode",93)
+	@$(call wr_colour,"current profile: RELEASE",93)
 	$(MAKE) clean
 	@touch compile_commands.json
+	$(MAKE)
 endif
 
 # include the dependencies

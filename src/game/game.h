@@ -1,8 +1,14 @@
 #pragma once
 
-#include <stdint.h>
+#include <math.h>
 
 #include "gametime.h"
+
+// constants for pi(π) and tau(τ)
+#define PI   (M_PI)         // π constant
+#define TAU  (M_PI * 2.0)   // τ constant
+#define PIf  (M_PIf)        //
+#define TAUf (M_PIf * 2.0F) //
 
 typedef struct {
     gametime time;

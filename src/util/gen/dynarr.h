@@ -1,13 +1,13 @@
 #ifndef DYNARR_H
 #define DYNARR_H
 #include <stddef.h>
-#include <stdint.h>
 
 #define DYNARR_COMB2(a, b) a##b
 #define DYNARR_COMB1(a, b) DYNARR_COMB2(a, b)
 #endif // DYNARR_H
 
 #ifdef DYNARR_TYPE
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 

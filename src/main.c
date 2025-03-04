@@ -50,13 +50,17 @@ int32_t main(int32_t argc, char** argv) {
     (void)argc, (void)argv;
 
     init();
+    debug("successfully initialized!");
 
     while (get_gamestatus() == STATUS_RUNNING)
         update();
 
+    debug("done! starting to free resources...");
     game_free(&gdat);
     render_free(&rdat);
     SDL_Quit();
 
-    return get_gamestatus();
+    gamestatus exit_code = get_gamestatus();
+    debug("quitting with an exit code of %u", exit_code);
+    return exit_code;
 }

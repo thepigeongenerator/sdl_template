@@ -2,12 +2,13 @@
 
 #include <math.h>
 
+// stores a 2D point using a floating-point number
 typedef struct {
     float x;
     float y;
 } float2;
 
-// adds two float2s together
+// adds one float2 to another
 static inline float2 float2_add(float2 v1, float2 v2) {
     return (float2){v1.x + v2.x, v1.y + v2.y};
 }
@@ -17,8 +18,13 @@ static inline float2 float2_sub(float2 v1, float2 v2) {
     return (float2){v1.x - v2.x, v1.y - v2.y};
 }
 
-// multiplies the float2 by some value
-static inline float2 float2_mlt(float2 v, float n) {
+// multiplies one float2 by another
+static inline float2 float2_mlt(float2 v1, float2 v2) {
+    return (float2){v1.x * v2.x, v1.y * v2.y};
+}
+
+// scales the float2 by some value
+static inline float2 float2_scale(float2 v, float n) {
     return (float2){v.x * n, v.y * n};
 }
 

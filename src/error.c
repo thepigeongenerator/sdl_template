@@ -26,7 +26,7 @@ gamestatus get_gamestatus(void) {
     return status;
 }
 
-void debug(char const* restrict fmt, ...) {
+void debug(char const* fmt, ...) {
     char const* env = getenv("DEBUG");
     if (env == NULL || *env != '1')
         return;
@@ -54,7 +54,7 @@ noreturn void error(gamestatus error_code, char const* fname, uint32_t ln, char 
     write_args(buf1, fmt);
 
     char buf2[PRINT_BUFFER_SIZE * 2] = {0};
-    sprintf(buf2, "%s\n    at %s:%u", buf1, fname, ln);
+    sprintf(buf2, "%s\n    at %s:%u (exitcode: %u)", buf1, fname, ln, error_code);
 
     (void)fprintf(stderr, "\033[91mE: %s\033[0m\n", buf2);
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "something went wrong! :O", buf2, NULL);

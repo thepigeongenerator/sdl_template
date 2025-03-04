@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdnoreturn.h>
 
 /* defines statuses in the 0..127, any higher/negative values are POSIX-reserved.
  * The max value (or -1) shall mean the application is running, anything else shall mean an exit code of some kind */
@@ -27,9 +28,12 @@ enum {
 };
 typedef int8_t gamestatus;
 
-void set_gamestatus(gamestatus);          // sets the current status of the game
-gamestatus get_gamestatus(void);          // gets the current status of the game
-void debug(char const*, ...);             // prints a debug message to stdout if the DEBUG environment variable is set, otherwise the call is ignored.
-void info(char const*, ...);              // prints an info message to stdout
-void warn(char const*, ...);              // prints a warning message to stderr
-void error(gamestatus, char const*, ...); // prints an error message to stderr before exiting
+void set_gamestatus(gamestatus); // sets the current status of the game
+gamestatus get_gamestatus(void); // gets the current status of the game
+void debug(char const*, ...);    // prints a debug message to stdout if the DEBUG environment variable is set, otherwise the call is ignored.
+void info(char const*, ...);     // prints an info message to stdout
+void warn(char const*, ...);     // prints a warning message to stderr
+
+// prints an error message to stderr before exiting
+#define error(status, fmt, ...) i_error(status, __LINE__, __FILE__, fmt, __VA_ARGS__)
+noreturn void i_error(gamestatus, uint32_t, char const*, char const*, ...);

@@ -8,7 +8,7 @@
             "env": {
                 "DEBUG": "1",
                 "ASAN_OPTIONS": "detect_leaks=0",
-                "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1",
+                "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1"
             },
             "program": "",
             "linux": {
@@ -20,7 +20,7 @@
                 "preLaunchTask": "(dbg) compile win-x86_64",
                 "program": "${workspaceFolder}/bin/linux-x86_64/dbg/${workspaceFolderBasename}.exe",
                 "cwd": "${workspaceFolder}/bin/win-x86_64/dbg/"
-            },
+            }
         }
     ]
 }

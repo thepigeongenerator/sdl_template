@@ -4,12 +4,12 @@
         {
             "label": "(dbg) compile linux-x86_64",
             "type": "shell",
-            "command": "DEBUG=1 make linux-x86_64",
+            "command": "DEBUG=1 make linux-x86_64"
         },
         {
             "label": "(dbg) compile win-x86_64",
             "type": "shell",
-            "command": "DEBUG=1 make win-x86_64",
+            "command": "DEBUG=1 make win-x86_64"
         }
     ]
 }

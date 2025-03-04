@@ -1,11 +1,10 @@
 #include "error.h"
 
+#include <SDL_messagebox.h>
 #include <stdarg.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "SDL_messagebox.h"
+#include <stdnoreturn.h>
 
 #define PRINT_BUFFER_SIZE 128 // defines the buffer size for printing
 
@@ -50,7 +49,7 @@ void warn(char const* fmt, ...) {
     (void)fprintf(stderr, "\033[93mW: %s\033[0m\n", buf);
 }
 
-void error(gamestatus error_code, char const* fmt, ...) {
+noreturn void error(gamestatus error_code, char const* fmt, ...) {
     char buf[PRINT_BUFFER_SIZE] = {0};
     write_args(buf, fmt);
     (void)fprintf(stderr, "\033[91mE: %s\033[0m\n", buf);

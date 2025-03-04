@@ -12,14 +12,14 @@
 #include "colour/colour32.h"
 
 void render_init(renderdata* const rdat, gamedata const* const gdat) {
-    SDL_Window* const window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 100, 100, SDL_WINDOW_SHOWN);
+    SDL_Window* const window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, SDL_WINDOW_SHOWN);
     if (window == NULL)
-        error(ERROR_SDL_RENDERING_INIT, "failed to create a window. SDL Error: %s", SDL_GetError());
+        error(ERROR_SDL_RENDERING_INIT, __FILE_NAME__, __LINE__, "failed to create a window. SDL Error: %s", SDL_GetError());
 
     // rendere using vsync to limit updates to the refresh rate of the monitor
     SDL_Renderer* const renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
     if (renderer == NULL)
-        error(ERROR_SDL_RENDERING_INIT, "failed to create a renderer. SDL Error: %s", SDL_GetError());
+        error(ERROR_SDL_RENDERING_INIT, __FILE_NAME__, __LINE__, "failed to create a renderer. SDL Error: %s", SDL_GetError());
 
     *rdat = (renderdata){
         window,

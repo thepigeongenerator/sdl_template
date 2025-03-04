@@ -35,5 +35,4 @@ void info(char const*, ...);     // prints an info message to stdout
 void warn(char const*, ...);     // prints a warning message to stderr
 
 // prints an error message to stderr before exiting
-#define error(status, fmt, ...) i_error(status, __LINE__, __FILE__, fmt, __VA_ARGS__)
-noreturn void i_error(gamestatus, uint32_t, char const*, char const*, ...);
+noreturn void error(gamestatus, char const* file_name, uint32_t line, char const* fmt, ...);

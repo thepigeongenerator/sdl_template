@@ -26,7 +26,7 @@ gamestatus get_gamestatus(void) {
     return status;
 }
 
-void debug(char const* fmt, ...) {
+void debug(char const* restrict fmt, ...) {
     char const* env = getenv("DEBUG");
     if (env == NULL || *env != '1')
         return;

@@ -49,7 +49,7 @@ void warn(char const* fmt, ...) {
     (void)fprintf(stderr, "\033[93mW: %s\033[0m\n", buf);
 }
 
-noreturn void i_error(gamestatus error_code, uint32_t ln, char const* fname, char const* fmt, ...) {
+noreturn void error(gamestatus error_code, char const* fname, uint32_t ln, char const* fmt, ...) {
     char buf1[PRINT_BUFFER_SIZE] = {0};
     write_args(buf1, fmt);
 

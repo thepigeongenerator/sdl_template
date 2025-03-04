@@ -56,23 +56,23 @@ static void audio_cvt(audiodevice const* dev, SDL_AudioSpec const* spec, uint8_t
     cvt.buf = realloc(*bufptr, cvt.len * cvt.len_mult); // grow the inputted buffer for the conversion
 
     if (cvt.buf == NULL)
-        error(ERROR_STD_MEMORY, "something went wrong whilst growing the audio buffer whilst converting! (ln:%u)", __LINE__);
+        error(ERROR_STD_MEMORY, __FILE_NAME__, __LINE__, "something went wrong whilst growing the audio buffer whilst converting!");
 
     // converts the audio to the new format
     if (!SDL_ConvertAudio(&cvt))
-        error(ERROR_SDL_AUDIO_INIT, "something went wrong when loading/converting an audio buffer! (ln:%u) SDL Error: %s", __LINE__, SDL_GetError());
+        error(ERROR_SDL_AUDIO_INIT, __FILE_NAME__, __LINE__, "something went wrong when loading/converting an audio buffer! SDL Error: %s", SDL_GetError());
     *len = cvt.len;
 
     *bufptr = realloc(cvt.buf, cvt.len_cvt);
     if (*bufptr == NULL)
-        error(ERROR_STD_MEMORY, "something went wrong whilst shrinking the audio buffer whilst converting! (ln:%u)", __LINE__);
+        error(ERROR_STD_MEMORY, __FILE_NAME__, __LINE__, "something went wrong whilst shrinking the audio buffer whilst converting!");
 }
 
 audiodevice* audio_device_init(int32_t freq, SDL_AudioFormat fmt, uint8_t channels, uint16_t samples) {
     audiodevice* dev = malloc(sizeof(audiodevice));
 
     if (dev == NULL)
-        error(ERROR_STD_INIT, "null pointer when allocating memory for the audio device! (ln:%u)", __LINE__);
+        error(ERROR_STD_INIT, __FILE_NAME__, __LINE__, "null pointer when allocating memory for the audio device!");
 
     // define the audio specification
     SDL_AudioSpec spec = {freq, fmt, channels, 0, samples, 0, 0, NULL, NULL};
@@ -90,7 +90,7 @@ audiodevice* audio_device_init(int32_t freq, SDL_AudioFormat fmt, uint8_t channe
 
     // if the audio device isn't set, cause an error
     if (dev->id < 1)
-        error(ERROR_SDL_AUDIO_INIT, "audio device failed to open! (ln:%u) SDL Error: %s", __LINE__, SDL_GetError());
+        error(ERROR_SDL_AUDIO_INIT, __FILE_NAME__, __LINE__, "audio device failed to open! SDL Error: %s", SDL_GetError());
 
     // default state of the device is paused, so we unpause it here
     SDL_PauseAudioDevice(dev->id, 0);

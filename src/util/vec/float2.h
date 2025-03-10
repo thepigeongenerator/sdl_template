@@ -19,17 +19,22 @@ static inline float2 float2_sub(float2 v1, float2 v2) {
 }
 
 // multiplies one float2 by another
-static inline float2 float2_mlt(float2 v1, float2 v2) {
+static inline float2 float2_mul(float2 v1, float2 v2) {
     return (float2){v1.x * v2.x, v1.y * v2.y};
 }
 
-// scales the float2 by some value
-static inline float2 float2_scale(float2 v, float n) {
+// divides one float2 by another
+static inline float2 float2_div(float2 v1, float2 v2) {
+    return (float2){v1.x / v2.x, v1.y / v2.y};
+}
+
+// preforms a scalar multiplication upon the float2 (multiplies the float2 by some value)
+static inline float2 float2_mul_s(float2 v, float n) {
     return (float2){v.x * n, v.y * n};
 }
 
-// divides the float2 by some value
-static inline float2 float2_div(float2 v, float n) {
+// preforms a scalar division upon the float2 (divides the float2 by some value)
+static inline float2 float2_div_s(float2 v, float n) {
     return (float2){v.x / n, v.y / n};
 }
 
@@ -46,7 +51,7 @@ static inline float float2_mag(float2 v) {
 // normalizes the float2
 static inline float2 float2_norm(float2 v) {
     float s = 1.0F / float2_mag(v); // get the scaling factor
-    return float2_scale(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
+    return float2_mul_s(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
 }
 
 // gets the dot product of two float2s

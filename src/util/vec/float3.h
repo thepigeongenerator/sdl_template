@@ -20,17 +20,22 @@ static inline float3 float3_sub(float3 v1, float3 v2) {
 }
 
 // multiplies one float3 by another
-static inline float3 float3_mlt(float3 v1, float3 v2) {
+static inline float3 float3_mul(float3 v1, float3 v2) {
     return (float3){v1.x * v2.x, v1.y * v2.y, v1.z * v2.z};
 }
 
-// scales the float3 by some value
-static inline float3 float3_scale(float3 v, float n) {
+// divides one float3 by another
+static inline float3 float3_div(float3 v1, float3 v2) {
+    return (float3){v1.x / v2.x, v1.y / v2.y, v1.z / v2.z};
+}
+
+// preforms a scalar multiplication upon the float3 (multiplies the float3 by some value)
+static inline float3 float3_mul_s(float3 v, float n) {
     return (float3){v.x * n, v.y * n, v.z * n};
 }
 
-// divides the float3 by some value
-static inline float3 float3_div(float3 v, float n) {
+// preforms a scalar division upon the float3 (divides the float3 by some value)
+static inline float3 float3_div_s(float3 v, float n) {
     return (float3){v.x / n, v.y / n, v.z / n};
 }
 
@@ -47,7 +52,7 @@ static inline float float3_mag(float3 v) {
 // normalizes the float3
 static inline float3 float3_norm(float3 v) {
     float s = 1.0F / float3_mag(v); // get the scaling factor
-    return float3_scale(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
+    return float3_mul_s(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
 }
 
 // gets the dot product of two float3s

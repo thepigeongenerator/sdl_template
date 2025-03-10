@@ -21,17 +21,22 @@ static inline float4 float4_sub(float4 v1, float4 v2) {
 }
 
 // multiplies one float4 by another
-static inline float4 float4_mlt(float4 v1, float4 v2) {
+static inline float4 float4_mul(float4 v1, float4 v2) {
     return (float4){v1.x * v2.x, v1.y * v2.y, v1.z * v2.z, v1.w * v2.w};
 }
 
-// scales the float4 by some value
-static inline float4 float4_scale(float4 v, float n) {
+// divides one float4 by another
+static inline float4 float4_div(float4 v1, float4 v2) {
+    return (float4){v1.x / v2.x, v1.y / v2.y, v1.z / v2.z, v1.w / v2.w};
+}
+
+// preforms a scalar multiplication upon the float4 (multiplies the float4 by some value)
+static inline float4 float4_mul_s(float4 v, float n) {
     return (float4){v.x * n, v.y * n, v.z * n, v.w * n};
 }
 
-// divides the float4 by some value
-static inline float4 float4_div(float4 v, float n) {
+// preforms a scalar division upon the float4 (divides the float4 by some value)
+static inline float4 float4_div_s(float4 v, float n) {
     return (float4){v.x / n, v.y / n, v.z / n, v.w / n};
 }
 
@@ -48,7 +53,7 @@ static inline float float4_mag(float4 v) {
 // normalizes the float4
 static inline float4 float4_norm(float4 v) {
     float s = 1.0F / float4_mag(v); // get the scaling factor
-    return float4_scale(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
+    return float4_mul_s(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
 }
 
 // gets the dot product of two float4s

@@ -33,19 +33,19 @@ static inline float2 float2_div(float2 v, float n) {
     return (float2){v.x / n, v.y / n};
 }
 
-// gets the squared length of float2
-static inline float float2_len2(float2 v) {
+// gets the squared magnitude/length of float2
+static inline float float2_mag2(float2 v) {
     return (v.x * v.x) + (v.y * v.y);
 }
 
-// gets the length of float2 (magnitude)
-static inline float float2_len(float2 v) {
-    return sqrtf(float2_len2(v));
+// gets the length of float2 (length)
+static inline float float2_mag(float2 v) {
+    return sqrtf(float2_mag2(v));
 }
 
 // normalizes the float2
 static inline float2 float2_norm(float2 v) {
-    float len = float2_len(v);
+    float len = float2_mag(v);
     return float2_div(v, len);
 }
 

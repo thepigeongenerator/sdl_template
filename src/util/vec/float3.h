@@ -34,19 +34,19 @@ static inline float3 float3_div(float3 v, float n) {
     return (float3){v.x / n, v.y / n, v.z / n};
 }
 
-// gets the squared length of float3
-static inline float float3_len2(float3 v) {
+// gets the squared magnitude/length of float3
+static inline float float3_mag2(float3 v) {
     return (v.x * v.x) + (v.y * v.y) + (v.z * v.z);
 }
 
-// gets the length of float3 (magnitude)
-static inline float float3_len(float3 v) {
-    return sqrtf(float3_len2(v));
+// gets the length of float3 (length)
+static inline float float3_mag(float3 v) {
+    return sqrtf(float3_mag2(v));
 }
 
 // normalizes the float3
 static inline float3 float3_norm(float3 v) {
-    float len = float3_len(v);
+    float len = float3_mag(v);
     return float3_div(v, len);
 }
 

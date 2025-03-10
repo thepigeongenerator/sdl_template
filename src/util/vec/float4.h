@@ -47,8 +47,8 @@ static inline float float4_mag(float4 v) {
 
 // normalizes the float4
 static inline float4 float4_norm(float4 v) {
-    float len = float4_mag(v);
-    return float4_div(v, len);
+    float s = 1.0F / float4_mag(v); // get the scaling factor
+    return float4_scale(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
 }
 
 // gets the dot product of two float4s

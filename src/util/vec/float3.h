@@ -46,8 +46,8 @@ static inline float float3_mag(float3 v) {
 
 // normalizes the float3
 static inline float3 float3_norm(float3 v) {
-    float len = float3_mag(v);
-    return float3_div(v, len);
+    float s = 1.0F / float3_mag(v); // get the scaling factor
+    return float3_scale(v, s);      // scale the vector by the scaling factor (slightly more efficient than dividing)
 }
 
 // gets the dot product of two float3s

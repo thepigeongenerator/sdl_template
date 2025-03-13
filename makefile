@@ -6,6 +6,7 @@ STD := c17
 LANG = c
 CFLAGS := $(shell pkg-config --cflags sdl2) -Wall -Wextra -Wpedantic -Wno-pointer-arith
 LDFLAGS := $(shell pkg-config --libs sdl2) -lm
+DEBUG ?= 0
 
 ifeq ($(DEBUG),1)
 CFLAGS += -DDEBUG -fsanitize=address,undefined -g -Og
@@ -35,16 +36,23 @@ define wr_colour
 	@echo -e "\033[$(2)m$(1)\033[0m"
 endef
 
-# sets the variables for the different targets
-linux-x86_64:
-	@$(MAKE) _build ARCH=$@ CFLAGS="$(CFLAGS) -target x86_64-pc-linux-gnu"
-win-x86_64:
-	@$(MAKE) _build ARCH=$@ CFLAGS="$(CFLAGS) -target x86_64-pc-windows-gnu" EXT=".exe"
-web:
-	@$(MAKE) _build ARCH=$@ CC=emcc EXT=".html"
+# set the correct environment variables depending on the platform
+ifeq ($(ARCH),linux-x86_64)
+CFLAGS += -target x86_64-pc-linux-gnu
+else ifeq ($(ARCH),win-x86_64)
+CFLAGS += -target x86_64-pc-windows-gnu
+EXT=.exe
+else ifeq ($(ARCH),web)
+CC=emcc
+EXT=.html
+else
+$(error you must set the ARCH environment variable to either 'linux-x86_64', 'win-x86_64' or 'web')
+endif
 
-all: linux-x86_64 win-x86_64 web
-_build: compile_commands.json $(DIR) $(TARGET) $(ASSETS)
+# compiles and execute the binary
+run: compile
+	./$(TARGET)
+compile: compile_commands.json $(DIR) $(TARGET) $(ASSETS)
 clean:
 	rm -rf $(DIR_BIN) $(DIR_OBJ) compile_commands.json
 
@@ -77,11 +85,9 @@ ifeq ($(DEBUG),1)
 compile_commands.json: makefile
 	$(MAKE) clean
 	@touch compile_commands.json
-	bear -- make $(ARCH)
+	bear -- make compile
 else
-compile_commands.json: makefile
-	$(MAKE) clean
-	@touch compile_commands.json
+compile_commands.json:
 endif
 
 # include the dependencies

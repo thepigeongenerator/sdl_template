@@ -12,7 +12,7 @@ ifeq ($(DEBUG),1)
 CFLAGS += -DDEBUG -fsanitize=address,undefined -g -Og
 PROF := dbg
 else
-REL_FLAGS += -O3
+REL_FLAGS += -O2
 PROF := rel
 endif
 

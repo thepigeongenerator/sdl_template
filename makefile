@@ -1,3 +1,11 @@
+# dependencies:
+#  - make
+#  - clang
+#  - bear (debug)
+#  - sdl2
+#  - git bash (windows)
+#
+# project name = the workspace directory name
 NAME := $(shell basename $(PWD))
 
 # compiler settings

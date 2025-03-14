@@ -16,9 +16,9 @@ static inline float4 quat_from_float3(float3 v) {
 // converts euler angles into quaternion (ordered roll, pitch, yaw) (in radians)
 static inline float4 quat_from_euler(float3 euler) {
     euler = float3_mul_s(euler, 0.5F); // half the angles due to quaternions using θ/2 in the formula
-    float cx = cosf32(euler.x), sx = sinf32(euler.x);
-    float cy = cosf32(euler.y), sy = sinf32(euler.y);
-    float cz = cosf32(euler.z), sz = sinf32(euler.z);
+    float cx = cosf(euler.x), sx = sinf(euler.x);
+    float cy = cosf(euler.y), sy = sinf(euler.y);
+    float cz = cosf(euler.z), sz = sinf(euler.z);
 
     return (float4){
         .w = cx * cy * cz - sx * sy * sz,

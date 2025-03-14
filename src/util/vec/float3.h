@@ -39,6 +39,10 @@ static inline float3 float3_div_s(float3 v, float n) {
     return (float3){v.x / n, v.y / n, v.z / n};
 }
 
+static inline float3 float3_neg(float3 v) {
+    return (float3){-v.x, -v.y, -v.z};
+}
+
 // gets the squared magnitude/length of float3
 static inline float float3_mag2(float3 v) {
     return (v.x * v.x) + (v.y * v.y) + (v.z * v.z);

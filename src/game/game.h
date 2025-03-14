@@ -7,8 +7,8 @@
 // constants for pi(π) and tau(τ)
 #define PI   (M_PI)         // π constant
 #define TAU  (M_PI * 2.0)   // τ constant
-#define PIf  (M_PIf)        //
-#define TAUf (M_PIf * 2.0F) //
+#define PIf  (M_PIf)        // π constant as a 32-bit floating point
+#define TAUf (M_PIf * 2.0F) // τ constant as a 32-bit floating point
 
 typedef struct {
     gametime time;

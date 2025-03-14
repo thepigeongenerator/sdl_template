@@ -38,6 +38,11 @@ static inline float2 float2_div_s(float2 v, float n) {
     return (float2){v.x / n, v.y / n};
 }
 
+// negates the float2 (-v)
+static inline float2 float2_neg(float2 v) {
+    return (float2){-v.x, -v.y};
+}
+
 // gets the squared magnitude/length of float2
 static inline float float2_mag2(float2 v) {
     return (v.x * v.x) + (v.y * v.y);

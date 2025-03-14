@@ -40,6 +40,10 @@ static inline float4 float4_div_s(float4 v, float n) {
     return (float4){v.x / n, v.y / n, v.z / n, v.w / n};
 }
 
+static inline float4 float4_neg(float4 v) {
+    return (float4){-v.x, -v.y, -v.z, -v.w};
+}
+
 // gets the squared magnitude/length of float4
 static inline float float4_mag2(float4 v) {
     return (v.x * v.x) + (v.y * v.y) + (v.z * v.z) + (v.w * v.w);

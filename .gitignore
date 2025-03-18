@@ -16,4 +16,3 @@
 
 # unignore dotfiles that we'd like to keep
 !/.github/
-!/.vscode/

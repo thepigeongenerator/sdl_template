@@ -17,7 +17,7 @@ static renderdata rdat;
 static void init(void) {
     // initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-        error(ERROR_SDL_INIT, __FILE_NAME__, __LINE__, "SDL could not initialize! SDL Error: %s", SDL_GetError());
+        fatal(ERROR_SDL_INIT, __FILE_NAME__, __LINE__, "SDL could not initialize! SDL Error: %s", SDL_GetError());
 
     // initialize other game components
     gt = gametime_new();

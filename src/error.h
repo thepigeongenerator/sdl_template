@@ -33,6 +33,7 @@ gamestatus get_gamestatus(void); // gets the current status of the game
 void debug(char const*, ...);    // prints a debug message to stdout if the DEBUG environment variable is set, otherwise the call is ignored.
 void info(char const*, ...);     // prints an info message to stdout
 void warn(char const*, ...);     // prints a warning message to stderr
+void error(char const*, ...);    // prints an warning message to stderr
 
 // prints an error message to stderr before exiting
-noreturn void error(gamestatus, char const* file_name, uint32_t line, char const* fmt, ...);
+noreturn void fatal(gamestatus, char const* file_name, uint32_t line, char const* fmt, ...);

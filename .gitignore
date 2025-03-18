@@ -15,4 +15,6 @@
 /compile_commands.json
 
 # unignore dotfiles that we'd like to keep
+!.gitignore
+!.editorconfig
 !/.github/

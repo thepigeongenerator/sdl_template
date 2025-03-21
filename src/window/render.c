@@ -12,32 +12,32 @@
 #include "colour/colour32.h"
 
 void render_init(renderdata* const rdat, gamedata const* const gdat) {
-    SDL_Window* const window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, SDL_WINDOW_SHOWN);
-    if (window == NULL)
-        fatal(ERROR_SDL_RENDERING_INIT, __FILE_NAME__, __LINE__, "failed to create a window. SDL Error: %s", SDL_GetError());
+	SDL_Window* const window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, SDL_WINDOW_SHOWN);
+	if (window == NULL)
+		fatal(ERROR_SDL_RENDERING_INIT, __FILE_NAME__, __LINE__, "failed to create a window. SDL Error: %s", SDL_GetError());
 
-    // render using vsync to limit updates to the refresh rate of the monitor
-    SDL_Renderer* const renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-    if (renderer == NULL)
-        fatal(ERROR_SDL_RENDERING_INIT, __FILE_NAME__, __LINE__, "failed to create a renderer. SDL Error: %s", SDL_GetError());
+	// render using vsync to limit updates to the refresh rate of the monitor
+	SDL_Renderer* const renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+	if (renderer == NULL)
+		fatal(ERROR_SDL_RENDERING_INIT, __FILE_NAME__, __LINE__, "failed to create a renderer. SDL Error: %s", SDL_GetError());
 
-    *rdat = (renderdata){
-        window,
-        renderer,
-        gdat,
-    };
+	*rdat = (renderdata){
+		window,
+		renderer,
+		gdat,
+	};
 }
 
 void render_update(renderdata const* const rdat) {
-    set_colour32(rdat->renderer, COLOUR32_BLACK);
-    SDL_RenderClear(rdat->renderer);
+	set_colour32(rdat->renderer, COLOUR32_BLACK);
+	SDL_RenderClear(rdat->renderer);
 
-    // present the renderer
-    SDL_RenderPresent(rdat->renderer);
+	// present the renderer
+	SDL_RenderPresent(rdat->renderer);
 }
 
 void render_free(renderdata* const rdat) {
-    SDL_DestroyRenderer(rdat->renderer);
-    SDL_DestroyWindow(rdat->window);
-    *rdat = (renderdata){0};
+	SDL_DestroyRenderer(rdat->renderer);
+	SDL_DestroyWindow(rdat->window);
+	*rdat = (renderdata){0};
 }

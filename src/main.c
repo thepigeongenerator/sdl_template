@@ -15,52 +15,52 @@ static renderdata rdat;
 
 // initialize the game
 static void init(void) {
-    // initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-        fatal(ERROR_SDL_INIT, __FILE_NAME__, __LINE__, "SDL could not initialize! SDL Error: %s", SDL_GetError());
+	// initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+		fatal(ERROR_SDL_INIT, __FILE_NAME__, __LINE__, "SDL could not initialize! SDL Error: %s", SDL_GetError());
 
-    // initialize other game components
-    gt = gametime_new();
-    game_init(&gdat);
-    render_init(&rdat, &gdat);
+	// initialize other game components
+	gt = gametime_new();
+	game_init(&gdat);
+	render_init(&rdat, &gdat);
 }
 
 // perform the updates to the game
 static void update(void) {
-    // update the input
-    {
-        SDL_Event e;
-        while (SDL_PollEvent(&e)) {
-            switch (e.type) {
-            case SDL_QUIT:
-                set_gamestatus(STATUS_SUCCESS);
-                break;
-            }
-        }
-    }
+	// update the input
+	{
+		SDL_Event e;
+		while (SDL_PollEvent(&e)) {
+			switch (e.type) {
+			case SDL_QUIT:
+				set_gamestatus(STATUS_SUCCESS);
+				break;
+			}
+		}
+	}
 
-    // perform updates
-    gametime_update(&gt);
-    game_update(&gdat);
-    render_update(&rdat);
+	// perform updates
+	gametime_update(&gt);
+	game_update(&gdat);
+	render_update(&rdat);
 }
 
 // entry-point of the application
 int32_t main(int32_t argc, char** argv) {
-    (void)argc, (void)argv;
+	(void)argc, (void)argv;
 
-    init();
-    debug("successfully initialized!");
+	init();
+	debug("successfully initialized!");
 
-    while (get_gamestatus() == STATUS_RUNNING)
-        update();
+	while (get_gamestatus() == STATUS_RUNNING)
+		update();
 
-    debug("done! starting to free resources...");
-    game_free(&gdat);
-    render_free(&rdat);
-    SDL_Quit();
+	debug("done! starting to free resources...");
+	game_free(&gdat);
+	render_free(&rdat);
+	SDL_Quit();
 
-    gamestatus exit_code = get_gamestatus();
-    debug("quitting with an exit code of %u", exit_code);
-    return exit_code;
+	gamestatus exit_code = get_gamestatus();
+	debug("quitting with an exit code of %u", exit_code);
+	return exit_code;
 }

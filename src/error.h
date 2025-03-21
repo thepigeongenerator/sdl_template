@@ -6,7 +6,7 @@
 /* defines statuses in the 0..127, any higher/negative values are POSIX-reserved.
  * The max value (or -1) shall mean the application is running, anything else shall mean an exit code of some kind */
 enum {
-    // clang-format off
+	// clang-format off
     STATUS_SUCCESS = 0,                // 0; successful exit
     STATUS_ERROR   = 1,                // miscellaneous error
     ERROR_INIT     = STATUS_ERROR | 2, // initialisation error
@@ -24,7 +24,7 @@ enum {
     ERROR_SDL_AUDIO_INIT     = ERROR_SDL_INIT | 8,  // audio initialization error
 
     STATUS_RUNNING = -1,
-    // clang-format on
+	// clang-format on
 };
 typedef int8_t gamestatus;
 

@@ -7,9 +7,9 @@
 
 // contains the data necessary for rendering
 typedef struct {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    gamedata const* gdat;
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	gamedata const* gdat;
 } renderdata;
 
 void render_init(renderdata*, gamedata const*); // initializes the renderer, outputs to render_data

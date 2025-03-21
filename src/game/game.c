@@ -10,19 +10,19 @@
 #include "gametime.h"
 
 void game_init(gamedata* dat) {
-    *dat = (gamedata){
-        gametime_new(),
-    };
+	*dat = (gamedata){
+		gametime_new(),
+	};
 }
 
 void game_update(gamedata* dat) {
-    gametime_update(&dat->time);
-    uint8_t const* keys = SDL_GetKeyboardState(NULL);
+	gametime_update(&dat->time);
+	uint8_t const* keys = SDL_GetKeyboardState(NULL);
 
-    if (keys[SDL_SCANCODE_ESCAPE])
-        set_gamestatus(STATUS_SUCCESS);
+	if (keys[SDL_SCANCODE_ESCAPE])
+		set_gamestatus(STATUS_SUCCESS);
 }
 
 void game_free(gamedata* dat) {
-    *dat = (gamedata){0};
+	*dat = (gamedata){0};
 }

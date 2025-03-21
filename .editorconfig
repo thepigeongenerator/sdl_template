@@ -10,14 +10,13 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-
 [*.{c,h,cpp,hpp,rs}]
 indent_style = tab
 indent_size = 4
 
 [makefile]
 indent_style = tab
-indent_size = 1
+indent_size = 2
 
 [*.{yaml,json}]
 indent_style = space

@@ -17,4 +17,5 @@
 # unignore dotfiles that we'd like to keep
 !.gitignore
 !.editorconfig
+!/.clang-format
 !/.github/

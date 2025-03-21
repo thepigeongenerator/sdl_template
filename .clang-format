@@ -1,0 +1,252 @@
+---
+# ---------------------------
+# general style settings
+# ---------------------------
+BasedOnStyle:  ''               # (LLVM,Google,Chromium,Mozilla,WebKit,Microsoft,GNU,InheritParentConfig)
+Standard:      Auto             # automatically detect the language version
+ColumnLimit:   0                # 0: disable column limit
+LineEnding:    LF               # use LF line endings
+UseTab:        Neve             # (Never,ForIndentation,ForContinuationAndIndentation,Always)
+TabWidth:      4                # recommended to set this equal to IndentWidth
+IndentWidth:   4                # how wide each indent is
+ContinuationIndentWidth: 4      # width for a line continuation
+
+# ---------------------------
+# alignment options
+# ---------------------------
+AlignAfterOpenBracket:        Align            # (Align,DontAlign,AlwaysBreak,BlockIndent)
+AlignArrayOfStructures:       Left             # (Left,Right,None)
+AlignConsecutiveMacros:       AcrossEmptyLines # (None,Consecutive,AcrossEmptyLines,AcrossComments,AcrossEmptyLinesAndComments)
+AlignConsecutiveAssignments:  None             # (None,Consecutive,AcrossEmptyLines,AcrossComments,AcrossEmptyLinesAndComments)
+AlignConsecutiveBitFields:    AcrossEmptyLines # (None,Consecutive,AcrossEmptyLines,AcrossComments,AcrossEmptyLinesAndComments)
+AlignConsecutiveDeclarations: None             # (None,Consecutive,AcrossEmptyLines,AcrossComments,AcrossEmptyLinesAndComments)
+AlignEscapedNewlines:         Left             # (DontAlign,Left,LeftWithLastLine,Right)
+AlignOperands:                Align            # (DontAlign,Align,AlignAfterOperator)
+AlignTrailingComments:        Always           # (Leave,Always,Never)
+
+# ---------------------------
+# short constructs on a single line
+# ---------------------------
+AllowShortBlocksOnASingleLine:       Always        # (Never,Empty,Always)
+AllowShortFunctionsOnASingleLine:    All           # (None,InlineOnly,Empty,All)
+AllowShortLambdasOnASingleLine:      All           # (None,Empty,Inline,All)
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse # (Never,WithoutElse,OnlyFirstIf,AllIfsAndElse)
+AllowShortCaseLabelsOnASingleLine:   true
+AllowShortEnumsOnASingleLine:        true
+AllowShortLoopsOnASingleLine:        true
+
+# ---------------------------
+# break and wrapping options
+# ---------------------------
+AlwaysBreakBeforeMultilineStrings: true      # when defining multi-line strings, linebreak should be inserted
+BreakAfterReturnType:           Automatic    # is decided by PenaltyReturnTypeOnItsOwnLine
+BreakTemplateDeclarations:      MultiLine    # (Leave,No,MultiLine,Yes)
+BreakBeforeBinaryOperators:     None         # (None,NonAssignment,All)
+BreakBeforeConceptDeclarations: Never        # (Never,Allowed,Always)
+BreakBeforeBraces:              Attach       # (Attach,Linux,Mozilla,Stroustrup,Allman,Whitesmiths,GNU,WebKit,Custom)
+BreakInheritanceList:           BeforeColon  # (BeforeColon,BeforeComma,AfterColon)
+BreakConstructorInitializers:   BeforeColon  # (BeforeColon,BeforeComma,AfterColon)
+BreakBeforeTernaryOperators:    true
+BreakStringLiterals:            true
+
+# ---------------------------
+# brace wrapping configuration
+# ---------------------------
+BraceWrapping:
+  AfterControlStatement: Never # (Never,MultiLine,Always)
+  AfterCaseLabel:        false
+  AfterClass:            false
+  AfterEnum:             false
+  AfterFunction:         false
+  AfterNamespace:        false
+  AfterObjCDeclaration:  false
+  AfterStruct:           false
+  AfterUnion:            false
+  AfterExternBlock:      false
+  BeforeCatch:           false
+  BeforeElse:            false
+  BeforeLambdaBody:      false
+  BeforeWhile:           false
+  IndentBraces:          false
+  SplitEmptyFunction:    false
+  SplitEmptyRecord:      false
+  SplitEmptyNamespace:   false
+
+# ---------------------------
+# constructor initializer and parameter packing options
+# ---------------------------
+ConstructorInitializerIndentWidth: 4
+PackConstructorInitializers: BinPack          # (Never,BinPack,CurrentLine,NextLine,NextLineOnly)
+BinPackParameters: true                       # use bin-packing for paramter lists
+BinPackArguments:  false                      # false: function calls either on one line or one per line
+
+# ---------------------------
+# pointer alignment
+# ---------------------------
+DerivePointerAlignment: false      # automatically detect pointer alignment
+PointerAlignment:       Left       # (Left,Right,Middle)
+ReferenceAlignment:     Pointer    # (Pointer,Left,Right,Middle)
+
+# ---------------------------
+# include settings and sorting
+# ---------------------------
+IncludeIsMainSourceRegex: ''                  # only [*.{c,cc,cpp,c++,cxx,m,mm}] are considered to be "main"
+IncludeIsMainRegex: '([-_](test|unittest))?$' # regex used for identifying an include as "main", to assign catagory 0
+IncludeBlocks: Regroup                        # (Preserve,Merge,Regroup)
+IncludeCategories:
+  - Regex: '^<ext/.*\.h>'
+    Priority: 2
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: '^<.*\.h>'
+    Priority: 1
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: '^<.*'
+    Priority: 2
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: '.*'
+    Priority: 3
+    SortPriority: 0
+    CaseSensitive: false
+
+# ---------------------------
+# macro and language-specific settings
+# ---------------------------
+AttributeMacros:
+  - __capability
+ForEachMacros:
+  - foreach
+  - Q_FOREACH
+  - BOOST_FOREACH
+IfMacros:
+  - KJ_IF_MAYBE
+StatementAttributeLikeMacros:
+  - Q_EMIT
+StatementMacros:
+  - Q_UNUSED
+  - QT_REQUIRE_VERSION
+WhitespaceSensitiveMacros:
+  - STRINGIZE
+  - PP_STRINGIZE
+  - BOOST_PP_STRINGIZE
+  - NS_SWIFT_NAME
+  - CF_SWIFT_NAME
+
+# ---------------------------
+# additional formatting and sorting details
+# ---------------------------
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: false
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: LogicalBlock
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true                    # adds comments at namespace delimiters
+MaxEmptyLinesToKeep: 4
+ReflowComments: true                          # reflow comment text to match column limits
+RemoveBracesLLVM: false
+SeparateDefinitionBlocks: Leave
+ShortNamespaceLines: 1
+SortIncludes: CaseSensitive                   # (Never,CaseSensitive,CaseInsensitive)
+SortJavaStaticImport: Before
+SortUsingDeclarations: true
+
+# ---------------------------
+# spacing options
+# ---------------------------
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements         # (ControlStatements,ControlStatementsExceptControlMacros,NonEmptyParentheses,Always,Custom)
+SpaceBeforeParensOptions:
+  AfterControlStatements: true
+  AfterForeachMacros: true
+  AfterFunctionDefinitionName: false
+  AfterFunctionDeclarationName: false
+  AfterIfMacros: true
+  AfterOverloadedOperator: false
+  BeforeNonEmptyParentheses: false
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: Never
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: true
+SpacesInCStyleCastParentheses: false
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: 1
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceBeforeSquareBrackets: false
+BitFieldColonSpacing: Both
+
+# ---------------------------
+# indentation details
+# ---------------------------
+IndentAccessModifiers: false
+IndentCaseLabels: false
+IndentCaseBlocks: false
+IndentGotoLabels: true
+IndentPPDirectives: None
+IndentExternBlock: AfterExternBlock
+IndentRequires: false
+PPIndentWidth: 1
+
+# ---------------------------
+# raw string literal formats
+# ---------------------------
+RawStringFormats:
+  - Language: Cpp
+    Delimiters:
+      - cc
+      - CC
+      - cpp
+      - Cpp
+      - CPP
+      - 'c++'
+      - 'C++'
+    CanonicalDelimiter: ''
+    BasedOnStyle: google
+  - Language: TextProto
+    Delimiters:
+      - pb
+      - PB
+      - proto
+      - PROTO
+    EnclosingFunctions:
+      - EqualsProto
+      - EquivToProto
+      - PARSE_PARTIAL_TEXT_PROTO
+      - PARSE_TEST_PROTO
+      - PARSE_TEXT_PROTO
+      - ParseTextOrDie
+      - ParseTextProtoOrDie
+      - ParseTestProto
+      - ParsePartialTestProto
+    CanonicalDelimiter: pb
+    BasedOnStyle: google
+
+# ---------------------------
+# JavaScript specific settings
+# ---------------------------
+JavaScriptQuotes: Double
+JavaScriptWrapImports: true
+
+# ---------------------------
+# Objective-C specific settings
+# ---------------------------
+ObjCBinPackProtocolList: Never
+ObjCBlockIndentWidth: 4
+ObjCBreakBeforeNestedBlockParam: true
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: true
+...

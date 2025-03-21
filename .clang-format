@@ -59,7 +59,6 @@ BraceWrapping:
   AfterEnum:             false
   AfterFunction:         false
   AfterNamespace:        false
-  AfterObjCDeclaration:  false
   AfterStruct:           false
   AfterUnion:            false
   AfterExternBlock:      false
@@ -141,7 +140,6 @@ RemoveBracesLLVM:                 false                # don't automatically rem
 SeparateDefinitionBlocks:         Leave                # (Leave,Always.Never)
 ShortNamespaceLines:              1                    # how many lines a namespaces can be to be regarded "short"
 SortIncludes:                     CaseSensitive        # (Never,CaseSensitive,CaseInsensitive)
-SortJavaStaticImport:             Before               # (After,Before)
 SortUsingDeclarations:            LexicographicNumeric # (Never,Lexicographic,LexicographicNumeric)
 
 # ---------------------------
@@ -196,23 +194,4 @@ IndentExternBlock:     AfterExternBlock  # (AfterExternBlock,NoIndent,Indent)
 IndentRequiresClause:  false
 IndentPPDirectives:    AfterHash         # preprocessor indent style (None,AfterHash,BeforeHash)
 PPIndentWidth:         1
-
----
-# ---------------------------
-# JavaScript specific settings
-# ---------------------------
-Language:              JavaScript
-JavaScriptQuotes:      Double
-JavaScriptWrapImports: true
-
----
-# ---------------------------
-# Objective-C specific settings
-# ---------------------------
-Language:                        ObjC
-ObjCBinPackProtocolList:         Never
-ObjCBlockIndentWidth:            4
-ObjCBreakBeforeNestedBlockParam: true
-ObjCSpaceAfterProperty:          false
-ObjCSpaceBeforeProtocolList:     true
 ...

@@ -1,28 +1,28 @@
 #ifndef DYNARR_H
-#define DYNARR_H
-#include <stddef.h>
+# define DYNARR_H
+# include <stddef.h>
 
-#define DYNARR_COMB2(a, b) a##b
-#define DYNARR_COMB1(a, b) DYNARR_COMB2(a, b)
+# define DYNARR_COMB2(a, b) a##b
+# define DYNARR_COMB1(a, b) DYNARR_COMB2(a, b)
 #endif // DYNARR_H
 
 #ifdef DYNARR_TYPE
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+# include <stdint.h>
+# include <stdlib.h>
+# include <string.h>
 
 // customising the linkage
-#ifndef DYNARR_LINKAGE
-#define DYNARR_LINKAGE static inline
-#endif
+# ifndef DYNARR_LINKAGE
+#  define DYNARR_LINKAGE static inline
+# endif
 
 // customising the name
-#ifndef DYNARR_NAME
-#define DYNARR_NAME DYNARR_COMB1(dynarr_, DYNARR_TYPE)
-#endif // DYNARR_NAME
+# ifndef DYNARR_NAME
+#  define DYNARR_NAME DYNARR_COMB1(dynarr_, DYNARR_TYPE)
+# endif // DYNARR_NAME
 
-#define DYNARR_COUNT_MAX  (SIZE_MAX / sizeof(DYNARR_TYPE))
-#define DYNARR_FUNC(name) DYNARR_COMB1(DYNARR_NAME, _##name) // name of the initialization funcition
+# define DYNARR_COUNT_MAX  (SIZE_MAX / sizeof(DYNARR_TYPE))
+# define DYNARR_FUNC(name) DYNARR_COMB1(DYNARR_NAME, _##name) // name of the initialization funcition
 
 // define the dynamic array structure
 typedef struct {
@@ -166,11 +166,11 @@ DYNARR_LINKAGE uint8_t DYNARR_FUNC(remove)(DYNARR_NAME* arr, size_t idx) {
 }
 
 // clean up all defined definitions so they can be used again later
-#undef DYNARR_COUNT_MAX
-#undef DYNARR_FUNC
-#undef DYNARR_NAME
-#undef DYNARR_LINKAGE
-#undef DYNARR_TYPE
+# undef DYNARR_COUNT_MAX
+# undef DYNARR_FUNC
+# undef DYNARR_NAME
+# undef DYNARR_LINKAGE
+# undef DYNARR_TYPE
 #elif __INCLUDE_LEVEL__ != 0
-#error define DYNARR_TYPE before including
+# error define DYNARR_TYPE before including
 #endif // DYNARR_TYPE

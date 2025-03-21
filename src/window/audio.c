@@ -8,13 +8,13 @@
 #include <string.h>
 
 #ifdef __unix__
-#include <unistd.h>
-#define fexists(fname) (access(fname, F_OK) == 0)
+# include <unistd.h>
+# define fexists(fname) (access(fname, F_OK) == 0)
 #elif _WIN32
-#include <io.h>
-#define fexists(fname) (_access(fname, 0) == 0)
+# include <io.h>
+# define fexists(fname) (_access(fname, 0) == 0)
 #else
-#error platform not supported!
+# error platform not supported!
 #endif
 
 #include "../error.h"

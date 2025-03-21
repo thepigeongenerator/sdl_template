@@ -6,8 +6,13 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{c,h,cpp,hpp,rs}]
+[*.{rs}]
 indent_style = space
+indent_size = 4
+
+
+[*.{c,h,cpp,hpp,rs}]
+indent_style = tab
 indent_size = 4
 
 [makefile]

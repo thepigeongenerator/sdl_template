@@ -33,7 +33,7 @@ static void update(void) {
 		while (SDL_PollEvent(&e)) {
 			switch (e.type) {
 			case SDL_QUIT:
-				set_gamestatus(STATUS_SUCCESS);
+				gdat->run = false;
 				break;
 			}
 		}
@@ -52,7 +52,7 @@ int32_t main(int32_t argc, char** argv) {
 	init();
 	debug("successfully initialized!");
 
-	while (get_gamestatus() == STATUS_RUNNING)
+	while (gdat->run == true)
 		update();
 
 	debug("done! starting to free resources...");

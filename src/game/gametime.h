@@ -28,7 +28,7 @@ atrb_const static inline gametime gametime_new(void) {
 static inline void gametime_update(gametime* gt) {
 	struct timespec ts;
 	timespec_get(&ts, TIME_UTC);
-	gt->sec = (double)ts.tv_nsec * 1e-9;                                    // calculate the current time in seconds
+	gt->sec = (double)ts.tv_nsec * 1e-9 + ts.tv_sec;                        // calculate the current time in seconds
 	gt->delta = ((double)(ts.tv_nsec - gt->ts.tv_nsec) * 1e-9) * gt->scale; // calculate how much time has passed between this and last frame
 	gt->ts = ts;                                                            // update the game's timespec
 }

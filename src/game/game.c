@@ -16,7 +16,6 @@ void game_init(gamedata* dat, gametime* gt) {
 }
 
 void game_update(gamedata* dat) {
-	gametime_update(dat->time);
 	uint8_t const* keys = SDL_GetKeyboardState(NULL);
 
 	if (keys[SDL_SCANCODE_ESCAPE])

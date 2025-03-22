@@ -5,11 +5,9 @@
 
 #include "error.h"
 #include "game/game.h"
-#include "game/gametime.h"
 #include "window/render.h"
 
 // initialized in init(), reading beforehand is undefined behaviour
-static gametime gt;
 static gamedata gdat;
 static renderdata rdat;
 
@@ -20,8 +18,7 @@ static void init(void) {
 		fatal(ERROR_SDL_INIT, __FILE_NAME__, __LINE__, "SDL could not initialize! SDL Error: %s", SDL_GetError());
 
 	// initialize other game components
-	gt = gametime_new();
-	game_init(&gdat, &gt);
+	game_init(&gdat);
 	render_init(&rdat, &gdat);
 }
 
@@ -40,7 +37,6 @@ static void update(void) {
 	}
 
 	// perform updates
-	gametime_update(&gt);
 	game_update(&gdat);
 	render_update(&rdat);
 }

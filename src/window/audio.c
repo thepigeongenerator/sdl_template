@@ -173,8 +173,7 @@ audiodata audio_wav_load(audiodevice const* dev, char const* fpath) {
 
 	// load and parse the audio to the correct format
 	SDL_LoadWAV(fpath, &spec, &audio.buf, &audio.len);
-	if (!!audio_cvt(dev, &spec, &audio.buf, &audio.len)) {
-		free(audio.buf);
+	if (audio_cvt(dev, &spec, &audio.buf, &audio.len)) {
 		return (audiodata){0};
 	}
 

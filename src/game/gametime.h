@@ -34,6 +34,6 @@ static inline void gametime_update(gametime* gt) {
 }
 
 // gets how many times the game updates per second
-atrb_const static inline float gametime_get_ups(gametime* gt) {
+atrb_const static inline float gametime_get_ups(gametime const* gt) {
 	return 1.0F / gt->delta;
 }

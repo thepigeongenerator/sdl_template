@@ -16,16 +16,6 @@
 	(void)vsnprintf(buf, PRINT_BUFFER_SIZE, fmt, args); \
 	va_end(args);
 
-static gamestatus status = STATUS_RUNNING;
-
-void set_gamestatus(gamestatus nstatus) {
-	status = nstatus;
-}
-
-gamestatus get_gamestatus(void) {
-	return status;
-}
-
 void debug(char const* fmt, ...) {
 	char const* env = getenv("DEBUG");
 	if (env == NULL || *env != '1')
@@ -66,6 +56,5 @@ noreturn void fatal(gamestatus error_code, char const* fname, uint32_t ln, char 
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "something went wrong! :O", buf2, NULL);
 
 	// set status, but exit immediately, as code is not allowed to execute beyond this point
-	set_gamestatus(error_code);
-	exit(status);
+	exit(error_code);
 }

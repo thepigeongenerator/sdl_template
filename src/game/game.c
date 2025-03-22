@@ -6,12 +6,12 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "../error.h"
 #include "gametime.h"
 
 void game_init(gamedata* dat) {
 	*dat = (gamedata){
 		gametime_new(),
+		true,
 	};
 }
 
@@ -20,7 +20,7 @@ void game_update(gamedata* dat) {
 	uint8_t const* keys = SDL_GetKeyboardState(NULL);
 
 	if (keys[SDL_SCANCODE_ESCAPE])
-		set_gamestatus(STATUS_SUCCESS);
+		dat->run = false;
 }
 
 void game_free(gamedata* dat) {

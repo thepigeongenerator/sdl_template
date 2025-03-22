@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math.h>
+#include <stdbool.h>
 
 #include "gametime.h"
 
@@ -12,6 +13,7 @@
 
 typedef struct {
 	gametime time;
+	bool run;
 } gamedata;
 
 void game_init(gamedata*);   // initializes everything needed to start the game; outputs to game_data

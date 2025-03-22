@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdlib.h>
 #include <time.h>
 
 typedef struct {
@@ -20,6 +21,10 @@ static inline gametime gametime_new(void) {
 		1.0F,
 		0.0F,
 	};
+}
+
+static inline void gametime_free(gametime* gt) {
+	free(gt);
 }
 
 // updates the internal variables

@@ -21,7 +21,7 @@ static void init(void) {
 
 	// initialize other game components
 	gt = gametime_new();
-	game_init(&gdat);
+	game_init(&gdat, &gt);
 	render_init(&rdat, &gdat);
 }
 
@@ -33,7 +33,7 @@ static void update(void) {
 		while (SDL_PollEvent(&e)) {
 			switch (e.type) {
 			case SDL_QUIT:
-				gdat->run = false;
+				gdat.run = false;
 				break;
 			}
 		}
@@ -52,15 +52,12 @@ int32_t main(int32_t argc, char** argv) {
 	init();
 	debug("successfully initialized!");
 
-	while (gdat->run == true)
+	while (gdat.run == true)
 		update();
 
 	debug("done! starting to free resources...");
 	game_free(&gdat);
 	render_free(&rdat);
 	SDL_Quit();
-
-	gamestatus exit_code = get_gamestatus();
-	debug("quitting with an exit code of %u", exit_code);
-	return exit_code;
+	return 0;
 }

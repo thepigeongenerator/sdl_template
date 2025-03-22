@@ -12,10 +12,10 @@
 #define TAUf (M_PIf * 2.0F) // τ constant as a 32-bit floating point
 
 typedef struct {
-	gametime* time;
+	struct gametime time;
 	bool run;
 } gamedata;
 
-void game_init(gamedata*, gametime*);   // initializes everything needed to start the game; outputs to game_data
+void game_init(gamedata*);   // initializes everything needed to start the game; outputs to game_data
 void game_update(gamedata*); // causes an update to occur within the game
 void game_free(gamedata*);   // frees the resources associated with the game

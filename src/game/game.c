@@ -8,15 +8,15 @@
 
 #include "gametime.h"
 
-void game_init(gamedata* dat) {
+void game_init(gamedata* dat, gametime* gt) {
 	*dat = (gamedata){
-		gametime_new(),
+		gt,
 		true,
 	};
 }
 
 void game_update(gamedata* dat) {
-	gametime_update(&dat->time);
+	gametime_update(dat->time);
 	uint8_t const* keys = SDL_GetKeyboardState(NULL);
 
 	if (keys[SDL_SCANCODE_ESCAPE])
@@ -24,5 +24,6 @@ void game_update(gamedata* dat) {
 }
 
 void game_free(gamedata* dat) {
+	gametime_free(dat->time);
 	*dat = (gamedata){0};
 }

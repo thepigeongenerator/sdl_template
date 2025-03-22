@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "../util/attributes.h"
+
 typedef struct {
 	struct timespec ts; // stores the time at the current update
 	double sec;         // stores the current time in seconds
@@ -11,7 +13,7 @@ typedef struct {
 } gametime;
 
 // initializes the gametime struct
-static inline gametime gametime_new(void) {
+atrb_const static inline gametime gametime_new(void) {
 	struct timespec ts;
 	timespec_get(&ts, TIME_UTC);
 
@@ -37,6 +39,6 @@ static inline void gametime_update(gametime* gt) {
 }
 
 // gets how many times the game updates per second
-static inline float gametime_get_ups(gametime* gt) {
+atrb_const static inline float gametime_get_ups(gametime* gt) {
 	return 1.0F / gt->delta;
 }

@@ -23,6 +23,5 @@ void game_update(gamedata* dat) {
 }
 
 void game_free(gamedata* dat) {
-	gametime_free(dat->time);
 	*dat = (gamedata){0};
 }

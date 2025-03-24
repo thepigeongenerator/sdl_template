@@ -12,11 +12,11 @@ indent_size = 4
 
 [*.{c,h,cpp,hpp,rs}]
 indent_style = tab
-indent_size = 4
+indent_size = tab
 
 [makefile]
 indent_style = tab
-indent_size = 2
+indent_size = tab
 
 [*.{yaml,json}]
 indent_style = space

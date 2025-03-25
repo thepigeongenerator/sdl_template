@@ -1,4 +1,5 @@
 #pragma once
+#include <features.h>
 #include <time.h>
 
 struct gametime {
@@ -7,6 +8,7 @@ struct gametime {
 };
 
 #if _POSIX_C_SOURCE >= 199309L
+# include <bits/time.h>
 static inline void gametime_get(struct timespec* ts) {
 	clock_gettime(CLOCK_MONOTONIC, ts);
 }

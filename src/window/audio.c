@@ -61,6 +61,8 @@ static void audiomixer(void* const userdata, uint8_t* const stream, int32_t cons
 	}
 }
 
+// converts the inputted audio to the format of dev
+// returns 1 upon failure, 0 upon success. When 1 is returned *bufptr will be freed. Otherwise *bufptr is reallocated
 static int8_t audio_cvt(audiodevice const* dev, SDL_AudioSpec const* spec, uint8_t** bufptr, uint32_t* len) {
 	// init the converter
 	SDL_AudioCVT cvt;
@@ -76,7 +78,7 @@ static int8_t audio_cvt(audiodevice const* dev, SDL_AudioSpec const* spec, uint8
 
 	// ensure the conversion buffer reallocation goes correctly
 	if (cvt.buf == NULL) {
-		error("%s:%u something went wrong whilst growing the audio buffer whilst converting!", __FILE_NAME__, __LINE__);
+		error("%s:%u failed to reallocate the audio buffer to the new size of %u bytes!", __FILE_NAME__, __LINE__, cvt.len);
 		free(*bufptr);
 		return 1;
 	}

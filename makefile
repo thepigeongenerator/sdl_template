@@ -76,7 +76,7 @@ $(TARGET): $(OBJ)
 $(DIR_OBJ)/$(ARCH)/$(PROF)/%.o: src/%.c
 	@$(call wr_colour,"compiling $(notdir $@) from $(notdir $<)",92)
 	@mkdir -p $(dir $@)
-	@$(CC) -o $@ -MD -MP -c $< $(CFLAGS) -std=$(STD) -x $(LANG) -Wno-unused-command-line-argument
+	@$(CC) -o $@ -MD -MP -c -std=$(STD) -x $(LANG) $< $(CFLAGS)
 
 # copy assets
 $(DIR_BUILD)/%: assets/%

@@ -21,7 +21,7 @@
 
 static void audiomixer(void* const userdata, uint8_t* const stream, int32_t const len) {
 	memset(stream, 0, len);            // clear the playing audio
-	audiodevice* const dev = userdata; // retreive the callback data
+	audiodevice* const dev = userdata; // retrieve the callback data
 
 	// return if dev is null, since it can fail to initialize
 	if (dev == NULL) return;

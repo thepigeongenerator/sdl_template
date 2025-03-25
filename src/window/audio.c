@@ -73,7 +73,7 @@ static int8_t audio_cvt(audiodevice const* dev, SDL_AudioSpec const* spec, uint8
 	} else if (!cvt.needed) { // ensure the conversion is necessary
 		return 0;
 	}
-	cvt.len = (*len) * spec->channels;                  // calculate the size of the source data in bytes by multiplying the length by the amount of channels (warn: uint32_t -> int32_t)
+	cvt.len = (*len);                                   // specify the length of the source data buffer in bytes (warn: uint32_t -> int32_t)
 	cvt.buf = realloc(*bufptr, cvt.len * cvt.len_mult); // grow the inputted buffer for the conversion
 
 	// ensure the conversion buffer reallocation goes correctly

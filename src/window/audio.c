@@ -186,7 +186,7 @@ audiodata audio_wav_load(audiodevice const* dev, char const* fpath) {
 	}
 
 	// calculate the time in miliseconds of the audio fragment
-	audio.ms = 1000 * (((audio.len) / (SDL_AUDIO_BITSIZE(dev->fmt) / 8)) / spec.channels / dev->freq);
+	audio.ms = ((((audio.len / (SDL_AUDIO_BITSIZE(dev->fmt) / 8)) / spec.channels) * 1000) / dev->freq);
 
 	return audio;
 }

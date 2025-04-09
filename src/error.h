@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdnoreturn.h>
 
+#include "util/attributes.h"
+
 /* defines statuses in the 0..127, any higher/negative values are POSIX-reserved.
  * The max value (or -1) shall mean the application is running, anything else shall mean an exit code of some kind */
 enum {
@@ -28,10 +30,10 @@ enum {
 };
 typedef int8_t gamestatus;
 
-__attribute__((format(printf, 1, 2))) void debug(char const*, ...); // prints a debug message to stdout if the DEBUG environment variable is set, otherwise the call is ignored.
-__attribute__((format(printf, 1, 2))) void info(char const*, ...);  // prints an info message to stdout
-__attribute__((format(printf, 1, 2))) void warn(char const*, ...);  // prints a warning message to stderr
-__attribute__((format(printf, 1, 2))) void error(char const*, ...); // prints an warning message to stderr
+atrb_nonnull(1) atrb_format(printf, 1, 2) void debug(char const*, ...); // prints a debug message to stdout if the DEBUG environment variable is set, otherwise the call is ignored.
+atrb_nonnull(1) atrb_format(printf, 1, 2) void info(char const*, ...);  // prints an info message to stdout
+atrb_nonnull(1) atrb_format(printf, 1, 2) void warn(char const*, ...);  // prints a warning message to stderr
+atrb_nonnull(1) atrb_format(printf, 1, 2) void error(char const*, ...); // prints an warning message to stderr
 
 // prints an error message to stderr before exiting
-__attribute__((format(printf, 4, 5))) noreturn void fatal(gamestatus, char const* file_name, uint32_t line, char const* fmt, ...);
+atrb_nonnull(2, 4) atrb_format(printf, 4, 5) noreturn void fatal(gamestatus, char const* file_name, uint32_t line, char const* fmt, ...);

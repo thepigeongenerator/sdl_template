@@ -6,6 +6,8 @@
 #define atrb_unused
 #define atrb_pure
 #define atrb_const
+#define atrb_format()
+#define atrb_nonnull()
 
 // define the attributes where possible
 #if defined(__GNUC__) || defined(__clang__)
@@ -25,9 +27,20 @@
 #  define atrb_pure __attribute__((pure))
 # endif
 
+
 # if __has_attribute(const)
 #  undef atrb_const
 #  define atrb_const __attribute__((const))
+# endif
+
+# if __has_attribute(format)
+#  undef atrb_format
+#  define atrb_format(...) __attribute__((format(__VA_ARGS__)))
+# endif
+
+# if __has_attribute(nonnull)
+#  undef atrb_nonnull
+#  define atrb_nonnull(...) __attribute__((nonnull(__VA_ARGS__)))
 # endif
 #elif defined(_MSC_VER)
 # undef atrb_depatrb_deprecated

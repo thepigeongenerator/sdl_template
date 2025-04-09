@@ -17,10 +17,10 @@ LDFLAGS := $(shell pkg-config --libs sdl2) -lm
 DEBUG ?= 0
 
 ifeq ($(DEBUG),1)
-CFLAGS += -DDEBUG -fsanitize=address,undefined -g -Og
+CFLAGS += -fsanitize=address,undefined -g -Og
 PROF := dbg
 else
-REL_FLAGS += -O2
+CFLAGS += -DNDEBUG -O2
 PROF := rel
 endif
 

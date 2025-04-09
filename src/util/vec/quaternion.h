@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <math.h>
 
 #include "../attributes.h"
@@ -49,6 +50,11 @@ atrb_const static inline float3 quat_to_euler(float4 q) {
 	b = 1 - 2 * (q.y * q.y + q.z * q.z); // cos(y)•cos(y)
 	euler.z = atan2f(a, b);
 
+	// verify that all axis are less than or equal to τ (tau)
+	assert(euler.x <= M_2_PIf);
+	assert(euler.y <= M_2_PIf);
+	assert(euler.z <= M_2_PIf);
+
 	// return the final angles
 	return euler;
 }
@@ -83,7 +89,8 @@ atrb_const static inline float4 quat_inv(float4 q) {
 
 // rotates a vector by the quaternion (q must be a unit quaternion (normalized))
 atrb_const static inline float3 quat_rot(float4 q, float3 v) {
-	q = quat_mul(quat_mul(q, quat_from_float3(v)), quat_conj(q)); // q•v•q¯¹ (using conjugate for q⁻¹, as for unit quaternions this is the same as the multiplicative inverse)
+	assert(fabsf(1.0F - (q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w)) < 0.005F); // assert whether the quaternion is a unit quaternion (within a margin of error due to float precision)
+	q = quat_mul(quat_mul(q, quat_from_float3(v)), quat_conj(q));                   // q•v•q¯¹ (using conjugate for q⁻¹, as for unit quaternions this is the same as the multiplicative inverse)
 	return (float3){q.x, q.y, q.z};
 }
 

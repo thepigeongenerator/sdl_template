@@ -3,6 +3,7 @@
 #include <SDL_audio.h>
 #include <SDL_error.h>
 #include <SDL_stdinc.h>
+#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,6 +74,7 @@ static int8_t audio_cvt(audiodevice const* dev, SDL_AudioSpec const* spec, uint8
 	} else if (!cvt.needed) { // ensure the conversion is necessary
 		return 0;
 	}
+	assert(*len > INT32_MAX);
 	cvt.len = (*len);                                   // specify the length of the source data buffer in bytes (warn: uint32_t -> int32_t)
 	cvt.buf = realloc(*bufptr, cvt.len * cvt.len_mult); // grow the inputted buffer for the conversion
 
@@ -181,6 +183,8 @@ audiodata audio_wav_load(audiodevice const* dev, char const* fpath) {
 
 	// load and parse the audio to the correct format
 	SDL_LoadWAV(fpath, &spec, &audio.buf, &audio.len);
+	assert(audio.buf != NULL);
+	assert(audio.len != 0);
 	if (audio_cvt(dev, &spec, &audio.buf, &audio.len)) {
 		return (audiodata){0};
 	}

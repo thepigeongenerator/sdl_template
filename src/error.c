@@ -2,6 +2,7 @@
 
 #include <SDL_messagebox.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdnoreturn.h>
